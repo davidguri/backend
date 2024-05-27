@@ -1,24 +1,11 @@
-import Department from "../models/department.model";
-import User, { Role } from "../models/user.model";
+import University from "../models/university.model";
 
-export const userMock: User[] = [
+export const universityMock: University[] = [
   {
-    id: "",
+    id: "0",
     name: "david",
-    email: "davidguri2006@gmail.com",
-    role: Role.Student,
-    department: Department.Engineering,
+    location: "davidguri2006@gmail.com",
     createdAt: new Date(),
     updatedAt: new Date(),
-  },
-
-  {
-    id: "1",
-    name: "david",
-    email: "davidguri2006@gmail.com",
-    role: Role.Student,
-    department: Department.Science,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
+  }
 ]

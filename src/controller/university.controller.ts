@@ -1,14 +1,14 @@
-import { userMock } from "../mocks/user.mock";
-import User from "../models/user.model";
+import { universityMock } from "../mocks/university.mock";
+import University from "../models/university.model";
 
-export class UserController {
-  static getUsers(): User[] {
-    return userMock
+export class UniversityController {
+  static getUniversity(): University[] {
+    return universityMock
   }
 
-  static getUsersById(id: string): User[] {
-    return userMock.filter(user => {
-      return user.id === id;
+  static getUniversityById(id: string): University[] {
+    return universityMock.filter(university => {
+      return university.id === id;
     })
   }
 }

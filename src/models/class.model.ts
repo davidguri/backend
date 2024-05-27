@@ -1,11 +1,11 @@
 import Department from "./department.model";
 
-type ClassType = {
-  id: number;
+type Class = {
+  id: string;
   name: string;
   department: Department;
   createdAt: Date;
   updatedAt: Date;
 };
 
-export default ClassType;
+export default Class;

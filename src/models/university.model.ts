@@ -1,5 +1,5 @@
 type UniversityType = {
-  id: number;
+  id: string;
   name: string;
   location: string;
   createdAt: Date;

@@ -13,7 +13,7 @@ export class UniversityEntity {
   location!: string
 
   @OneToMany(() => UserEntity, (user) => user.university)
-  users!: UserEntity[];
+  users?: UserEntity[];
 
   @CreateDateColumn()
   createdAt!: Date

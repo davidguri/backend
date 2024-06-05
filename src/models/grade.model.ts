@@ -1,7 +1,7 @@
 type Grade = {
   id: string;
   grade: number;
-  gradePercentage: number;
+  percentage: number;
   createdAt: Date;
   updatedAt: Date;
 };

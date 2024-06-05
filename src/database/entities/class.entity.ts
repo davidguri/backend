@@ -13,8 +13,8 @@ export class ClassEntity {
   department!: Department
 
   @CreateDateColumn()
-  createdAt!: string
+  createdAt!: Date
 
   @UpdateDateColumn()
-  updatedAt!: string
+  updatedAt!: Date
 }

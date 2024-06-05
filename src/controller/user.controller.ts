@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { UserRepository } from '../database/repositories/user.repository';
 import { UniversityRepository } from '../database/repositories/university.repository';
 import { UserEntity } from '../database/entities/user.entity';
-import { UserMapper } from '../database/mappers/user.mapper';
+import { UserMapper } from '../database/mappings/user.mapper';
 
 export class UserController {
   static async getUsers(req: Request, res: Response): Promise<void> {
@@ -72,7 +72,6 @@ export class UserController {
       user.role = userModel.role || user.role;
       user.department = userModel.department || user.department;
       user.university = userModel.university || user.university;
-      user.createdAt = userModel.createdAt || user.createdAt;
       user.updatedAt = userModel.updatedAt || user.updatedAt;
 
       const updatedUser = await UserRepository.save(user);

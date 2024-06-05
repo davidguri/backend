@@ -25,7 +25,7 @@ dataSource.initialize()
   .then(() => {
     console.log('Postgres Connection successful');
     app.listen(port, () => {
-      console.log(`Example app listening on port ${port}`);
+      console.log(`App listening on port ${port}`);
     });
   })
   .catch((err) => {

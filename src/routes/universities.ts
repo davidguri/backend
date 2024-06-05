@@ -1,21 +1,46 @@
 import express, { Request, Response } from "express";
+import { UniversityController } from "../controller/university.controller";
 
 export const router = express.Router();
 
-router.get('/', (req: Request, res: Response) => {
-  res.send('universities')
+router.get('/', async (req: Request, res: Response) => {
+  try {
+    await UniversityController.getUniversities(req, res);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
-router.post('/', (req: Request, res: Response) => {
-  res.send('add university')
+router.get('/:id', async (req: Request, res: Response) => {
+  try {
+    await UniversityController.getUniversitiesById(req, res);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
-router.put('/', (req: Request, res: Response) => {
-  res.send('update universities')
+router.post('/', async (req: Request, res: Response) => {
+  try {
+    await UniversityController.createUniversity(req, res);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
-router.delete('/', (req: Request, res: Response) => {
-  res.send('remove university')
+router.put('/:id', async (req: Request, res: Response) => {
+  try {
+    await UniversityController.updateUniversity(req, res);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.delete('/:id', async (req: Request, res: Response) => {
+  try {
+    await UniversityController.deleteUniversity(req, res);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 export default router

@@ -1,6 +1,7 @@
-import Department from "../models/department.model";
-import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn } from "typeorm"
-import { Role } from "../models/user.model";
+import Department from "../../models/department.model";
+import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, ManyToOne } from "typeorm"
+import { Role } from "../../models/user.model";
+import { UniversityEntity } from "./university.entity";
 
 @Entity("user")
 export class UserEntity {
@@ -13,6 +14,9 @@ export class UserEntity {
 
   @Column()
   email!: string
+
+  @ManyToOne(() => UniversityEntity, (university) => university.users)
+  university!: UniversityEntity | null
 
   @Column()
   role!: Role

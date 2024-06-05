@@ -10,6 +10,7 @@ export const userMock: User[] = [
     department: Department.Engineering,
     createdAt: new Date(),
     updatedAt: new Date(),
+    universityId: "",
   },
 
   {
@@ -20,5 +21,6 @@ export const userMock: User[] = [
     department: Department.Science,
     createdAt: new Date(),
     updatedAt: new Date(),
+    universityId: "",
   },
 ]

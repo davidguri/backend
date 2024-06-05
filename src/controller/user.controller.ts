@@ -2,12 +2,14 @@ import { Request, Response } from 'express';
 import { UserRepository } from '../database/repositories/user.repository';
 import { UniversityRepository } from '../database/repositories/university.repository';
 import { UserEntity } from '../database/entities/user.entity';
+import { UserMapper } from '../database/mappers/user.mapper';
 
 export class UserController {
   static async getUsers(req: Request, res: Response): Promise<void> {
     try {
-      const users = await UserRepository.find();
-      res.json(users);
+      const users = await UserRepository.find({ relations: ['university'] });
+      const userModels = users.map(UserMapper.toModel);
+      res.status(200).json(userModels);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -15,12 +17,13 @@ export class UserController {
 
   static async getUsersById(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
+
     try {
-      const user = await UserRepository.findOneBy({ id });
+      const user = await UserRepository.findOne({ where: { id }, relations: ['university'] });
       if (user) {
-        res.json(user);
+        res.status(200).json(UserMapper.toModel(user));
       } else {
-        res.status(404).json({ message: 'User not found' });
+        res.status(404).json({ message: 'User not found :(' });
       }
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -28,32 +31,25 @@ export class UserController {
   }
 
   static async createUser(req: Request, res: Response): Promise<void> {
-    const { id, name, email, universityId, role, department, createdAt, updatedAt } = req.body;
+    const userModel = req.body;
 
     try {
-
-      const user = new UserEntity;
-      user.id = id;
-      user.name = name;
-      user.email = email;
-      user.role = role;
-      user.department = department;
-      user.createdAt = createdAt;
-      user.updatedAt = updatedAt;
-
-      if (universityId) {
-        const university = await UniversityRepository.findOneBy({ id: universityId });
-
+      let university;
+      if (userModel.universityId) {
+        university = await UniversityRepository.findOneBy({ id: userModel.universityId });
         if (!university) {
-          res.status(404).json({ message: 'University not found :(' });
+          res.status(404).json({ message: 'University not found' });
           return;
         }
+      }
 
-        user.university = university
+      const user = UserMapper.toEntity(userModel);
+      if (university) {
+        user.university = university;
       }
 
       const savedUser = await UserRepository.save(user);
-      res.status(201).json(savedUser);
+      res.status(201).json(UserMapper.toModel(savedUser));
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -61,7 +57,7 @@ export class UserController {
 
   static async updateUser(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
-    const { name, email, role, department, createdAt, updatedAt } = req.body;
+    const userModel = req.body;
 
     try {
       const user = await UserRepository.findOneBy({ id });
@@ -71,16 +67,16 @@ export class UserController {
         return;
       }
 
-      user.id = id;
-      user.name = name;
-      user.email = email;
-      user.role = role;
-      user.department = department;
-      user.createdAt = createdAt;
-      user.updatedAt = updatedAt;
+      user.name = userModel.name || user.name;
+      user.email = userModel.email || user.email;
+      user.role = userModel.role || user.role;
+      user.department = userModel.department || user.department;
+      user.university = userModel.university || user.university;
+      user.createdAt = userModel.createdAt || user.createdAt;
+      user.updatedAt = userModel.updatedAt || user.updatedAt;
 
       const updatedUser = await UserRepository.save(user);
-      res.json(updatedUser);
+      res.status(200).json(UserMapper.toModel(updatedUser));
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -93,14 +89,14 @@ export class UserController {
       const user = await UserRepository.findOneBy({ id });
 
       if (!user) {
-        res.status(404).json({ message: "User not found :(" });
+        res.status(404).json({ message: 'User not found' });
         return;
       }
 
       await UserRepository.remove(user);
-      res.status(204).send();
+      res.status(200).json({ message: 'User deleted successfully' });
     } catch (error: any) {
-      res.status(500).json({ message: error.message })
+      res.status(500).json({ message: error.message });
     }
   }
 
@@ -113,8 +109,8 @@ export class UserController {
 
       if (user && university) {
         user.university = university;
-        await UserRepository.save(user);
-        res.status(200).send()
+        const updatedUser = await UserRepository.save(user);
+        res.status(200).json(UserMapper.toModel(updatedUser))
       } else {
         res.status(404).json({ message: "User or University not found :(" })
       }
@@ -127,19 +123,17 @@ export class UserController {
     const { userId } = req.body;
 
     try {
-      const user = await UserRepository.findOne({
-        where: { id: userId },
-        relations: ['university']
-      });
+      const user = await UserRepository.findOneBy({ id: userId });
 
-      if (user) {
-        user.university = null;
-        await UserRepository.save(user);
-        res.status(200).json(user);
-      } else {
-        res.status(404).json({ message: 'User not found :(' });
+      if (!user) {
+        res.status(404).json({ message: 'User not found' });
+        return;
       }
 
+      user.university = undefined;
+      const updatedUser = await UserRepository.save(user);
+
+      res.status(200).json(UserMapper.toModel(updatedUser));
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

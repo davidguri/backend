@@ -16,8 +16,8 @@ export class UniversityEntity {
   users!: UserEntity[];
 
   @CreateDateColumn()
-  createdAt!: string
+  createdAt!: Date
 
   @UpdateDateColumn()
-  updatedAt!: string
+  updatedAt!: Date
 }

@@ -10,6 +10,7 @@ type User = {
   id: string;
   name: string;
   email: string;
+  universityId: string | undefined;
   role: Role;
   department: Department;
   createdAt: Date;

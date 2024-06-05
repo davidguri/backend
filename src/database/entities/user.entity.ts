@@ -16,7 +16,7 @@ export class UserEntity {
   email!: string
 
   @ManyToOne(() => UniversityEntity, (university) => university.users)
-  university!: UniversityEntity | null
+  university!: UniversityEntity | undefined
 
   @Column()
   role!: Role
@@ -27,8 +27,8 @@ export class UserEntity {
   department!: Department
 
   @CreateDateColumn()
-  createdAt!: string
+  createdAt!: Date
 
   @UpdateDateColumn()
-  updatedAt!: string
+  updatedAt!: Date
 }

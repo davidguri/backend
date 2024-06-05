@@ -1,4 +1,4 @@
-type UniversityType = {
+type University = {
   id: string;
   name: string;
   location: string;
@@ -6,4 +6,4 @@ type UniversityType = {
   updatedAt: Date;
 };
 
-export default UniversityType;
+export default University;

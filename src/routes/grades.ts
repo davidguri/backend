@@ -1,21 +1,46 @@
 import express, { Request, Response } from "express";
+import { GradeController } from "../controller/grade.controller";
 
 export const router = express.Router();
 
-router.get('/', (req: Request, res: Response) => {
-  res.send('grades')
+router.get('/', async (req: Request, res: Response) => {
+  try {
+    await GradeController.getGrades(req, res);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-router.post('/', (req: Request, res: Response) => {
-  res.send('add grade')
+router.get('/:id', async (req: Request, res: Response) => {
+  try {
+    await GradeController.getGradesById(req, res);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-router.put('/', (req: Request, res: Response) => {
-  res.send('update grades')
+router.post('/', async (req: Request, res: Response) => {
+  try {
+    await GradeController.createGrade(req, res);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-router.delete('/', (req: Request, res: Response) => {
-  res.send('remove grade')
+router.put('/', async (req: Request, res: Response) => {
+  try {
+    await GradeController.updateGrade(req, res);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.delete('/', async (req: Request, res: Response) => {
+  try {
+    await GradeController.deleteGrade(req, res);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 export default router

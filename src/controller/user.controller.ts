@@ -129,7 +129,7 @@ export class UserController {
         return;
       }
 
-      user.university = undefined;
+      user.university = null;
       const updatedUser = await UserRepository.save(user);
 
       res.status(200).json(UserMapper.toModel(updatedUser));

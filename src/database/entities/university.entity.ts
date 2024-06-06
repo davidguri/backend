@@ -12,7 +12,7 @@ export class UniversityEntity {
   @Column()
   location!: string
 
-  @OneToMany(() => UserEntity, (user) => user.university)
+  @OneToMany(() => UserEntity, (user) => user.university, { nullable: true })
   users?: UserEntity[];
 
   @CreateDateColumn()

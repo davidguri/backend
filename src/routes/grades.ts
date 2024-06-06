@@ -3,17 +3,17 @@ import { GradeController } from "../controller/grade.controller";
 
 export const router = express.Router();
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/:id', async (req: Request, res: Response) => {
   try {
-    await GradeController.getGrades(req, res);
+    await GradeController.getGradesById(req, res);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
 
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   try {
-    await GradeController.getGradesById(req, res);
+    await GradeController.getGrades(req, res);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

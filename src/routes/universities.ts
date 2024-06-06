@@ -3,17 +3,17 @@ import { UniversityController } from "../controller/university.controller";
 
 export const router = express.Router();
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/:id', async (req: Request, res: Response) => {
   try {
-    await UniversityController.getUniversities(req, res);
+    await UniversityController.getUniversitiesById(req, res);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   try {
-    await UniversityController.getUniversitiesById(req, res);
+    await UniversityController.getUniversities(req, res);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

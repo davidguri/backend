@@ -4,19 +4,19 @@ import { CustomError } from '../utils/CustomError';
 
 const router = express.Router();
 
-router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await UserController.getUsers(req, res);
-  } catch (error: any) {
-    next(new CustomError('Failed to get users', 500));
-  }
-});
-
 router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     await UserController.getUsersById(req, res);
   } catch (error: any) {
     next(new CustomError('Failed to get users', 404));
+  }
+});
+
+router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await UserController.getUsers(req, res);
+  } catch (error: any) {
+    next(new CustomError('Failed to get users', 500));
   }
 });
 

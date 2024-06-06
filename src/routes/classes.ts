@@ -3,17 +3,17 @@ import { ClassController } from "../controller/class.controller";
 
 export const router = express.Router();
 
-router.get('/', async (req: Request, res: Response) => {
+router.post('/:id', async (req: Request, res: Response) => {
   try {
-    await ClassController.getClasses(req, res);
+    await ClassController.getClassesById(req, res);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.post('/', async (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   try {
-    await ClassController.getClassesById(req, res);
+    await ClassController.getClasses(req, res);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

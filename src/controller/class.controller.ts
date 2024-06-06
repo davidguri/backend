@@ -6,7 +6,7 @@ import { ClassMapper } from "../database/mappings/class.mapper";
 export class ClassController {
   static async getClasses(req: Request, res: Response): Promise<void> {
     try {
-      const classes = await ClassRepository.find()
+      const classes = await ClassRepository.findAll()
       const classModels = classes.map(ClassMapper.toModel)
       res.status(200).json(classModels)
     } catch (error: any) {
@@ -18,7 +18,7 @@ export class ClassController {
     const { id } = req.params;
 
     try {
-      const classObj = await ClassRepository.findOne({ where: { id: id } });
+      const classObj = await ClassRepository.findById(id);
       if (classObj) {
         res.status(200).json(ClassMapper.toModel(classObj))
       } else {
@@ -35,7 +35,7 @@ export class ClassController {
     try {
       const classObj = ClassMapper.toEntity(classModel)
 
-      const savedClass = await ClassRepository.save(classObj);
+      const savedClass = await ClassRepository.saveObject(classObj);
       res.status(201).json(ClassMapper.toModel(savedClass));
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -47,7 +47,7 @@ export class ClassController {
     const classModel = req.body;
 
     try {
-      const classObj = await ClassRepository.findOneBy({ id });
+      const classObj = await ClassRepository.findById(id);
 
       if (!classObj) {
         res.status(404).json({ message: "Class not found :(" });
@@ -58,7 +58,7 @@ export class ClassController {
       classObj.department = classModel.department || classObj.department;
       classObj.updatedAt = classModel.updatedAt || classObj.updatedAt;
 
-      const updatedClass = await ClassRepository.save(classObj);
+      const updatedClass = await ClassRepository.saveObject(classObj);
       res.status(200).json(ClassMapper.toModel(updatedClass))
     } catch (error: any) {
       res.status(500).json({ message: error.message })
@@ -69,14 +69,14 @@ export class ClassController {
     const { id } = req.params;
 
     try {
-      const classObj = await ClassRepository.findOneBy({ id });
+      const classObj = await ClassRepository.findById(id);
 
       if (!classObj) {
         res.status(404).json({ message: "Class not found L(" })
         return;
       }
 
-      await ClassRepository.remove(classObj);
+      await ClassRepository.removeObject(classObj);
       res.status(200).json({ message: "User deleted successfully" });
     } catch (error: any) {
       res.status(500).json({ message: error.message });

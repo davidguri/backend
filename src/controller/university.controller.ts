@@ -15,7 +15,7 @@ export class UniversityController {
   static async getUniversitiesById(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     try {
-      const university = await UniversityRepository.findOneBy({ id });
+      const university = await UniversityRepository.findById(id);
       if (university) {
         res.json(university);
       } else {
@@ -37,7 +37,7 @@ export class UniversityController {
     university.updatedAt = updatedAt;
 
     try {
-      const savedUniversity = await UniversityRepository.save(university);
+      const savedUniversity = await UniversityRepository.saveObject(university);
       res.status(201).json(savedUniversity);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -49,7 +49,7 @@ export class UniversityController {
     const { name, location, createdAt, updatedAt } = req.body;
 
     try {
-      const university = await UniversityRepository.findOneBy({ id });
+      const university = await UniversityRepository.findById(id);
 
       if (!university) {
         res.status(404).json({ message: 'University not found' });
@@ -62,7 +62,7 @@ export class UniversityController {
       university.createdAt = createdAt;
       university.updatedAt = updatedAt;
 
-      const updatedUniversity = await UniversityRepository.save(university);
+      const updatedUniversity = await UniversityRepository.saveObject(university);
       res.json(updatedUniversity);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -73,14 +73,14 @@ export class UniversityController {
     const { id } = req.params;
 
     try {
-      const university = await UniversityRepository.findOneBy({ id });
+      const university = await UniversityRepository.findById(id);
 
       if (!university) {
         res.status(404).json({ message: "University not found :(" });
         return;
       }
 
-      await UniversityRepository.remove(university);
+      await UniversityRepository.removeObject(university);
       res.status(204).send();
     } catch (error: any) {
       res.status(500).json({ message: error.message })

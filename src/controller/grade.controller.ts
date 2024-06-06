@@ -5,7 +5,7 @@ import { GradeMapper } from "../database/mappings/grade.mapper";
 export class GradeController {
   static async getGrades(req: Request, res: Response): Promise<void> {
     try {
-      const grades = await GradeRepository.find();
+      const grades = await GradeRepository.findAll();
       const gradeModels = grades.map(GradeMapper.toModel);
       res.status(200).json(gradeModels);
     } catch (error: any) {
@@ -17,9 +17,7 @@ export class GradeController {
     const { id } = req.params;
 
     try {
-      const grade = await GradeRepository.findOne({
-        where: { id: id }
-      });
+      const grade = await GradeRepository.findById(id);
       if (grade) {
         res.status(200).json(GradeMapper.toModel(grade))
       } else {
@@ -36,7 +34,7 @@ export class GradeController {
     try {
       const grade = GradeMapper.toEntity(gradeModel)
 
-      const savedGrade = await GradeRepository.save(grade);
+      const savedGrade = await GradeRepository.saveObject(grade);
       res.status(201).json(GradeMapper.toModel(savedGrade));
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -48,7 +46,7 @@ export class GradeController {
     const gradeModel = req.body;
 
     try {
-      const grade = await GradeRepository.findOneBy({ id });
+      const grade = await GradeRepository.findById(id);
 
       if (!grade) {
         res.status(404).json({ message: "Grade not found :(" });
@@ -68,14 +66,14 @@ export class GradeController {
     const { id } = req.params;
 
     try {
-      const grade = await GradeRepository.findOneBy({ id });
+      const grade = await GradeRepository.findById(id);
 
       if (!grade) {
         res.status(404).json({ message: "Grade not found :(" });
         return;
       }
 
-      await GradeRepository.remove(grade);
+      await GradeRepository.removeObject(grade);
       res.status(200).json({ message: "Grade deleted successfully" });
     } catch (error: any) {
       res.status(500).json({ message: error.message })

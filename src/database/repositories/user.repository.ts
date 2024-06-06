@@ -1,10 +1,40 @@
 import { dataSource } from "../../typeorm.config";
+// import { Repository } from 'typeorm';
 import { UserEntity } from "../entities/user.entity";
 
-export const UserRepository = dataSource.getRepository(UserEntity);
+// export class UserRepository extends Repository<UserEntity> {
+//   findOneById(id: string): Promise<UserEntity | null> {
+//     return this.findOne({ where: { id } });
+//   }
 
-// class UserRepository {
+//   findAll(): Promise<UserEntity[]> {
+//     return this.find();
+//   }
 
-//   save(user: User) {
+//   saveObject(obj: UserEntity): Promise<UserEntity | undefined> {
+//     return this.save(obj);
+//   }
+
+//   removeObject(obj: UserEntity): Promise<UserEntity | undefined> {
+//     return this.remove(obj);
 //   }
 // }
+
+export const UserRepository = dataSource.getRepository(UserEntity).extend({
+  findAll(): Promise<UserEntity[]> {
+    return this.find();
+  },
+
+  findById(id: string): Promise<UserEntity | null> {
+    return this.findOne({ where: { id } });
+  },
+
+  saveObject(obj: UserEntity): Promise<UserEntity> {
+    return this.save(obj);
+  },
+
+  removeObject(obj: UserEntity): Promise<UserEntity> {
+    return this.remove(obj);
+  },
+})
+

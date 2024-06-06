@@ -11,6 +11,15 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/:location', async (req: Request, res: Response) => {
+  try {
+    await UniversityController.getUniversitiesByLocation(req, res);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+});
+// TODO: test this code here
+
 router.get('/', async (req: Request, res: Response) => {
   try {
     await UniversityController.getUniversities(req, res);

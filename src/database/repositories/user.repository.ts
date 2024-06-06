@@ -1,5 +1,7 @@
 import { dataSource } from "../../typeorm.config";
 import { UserEntity } from "../entities/user.entity";
+import { Role } from "../../models/user.model";
+import Department from "../../models/department.model";
 
 export const UserRepository = dataSource.getRepository(UserEntity).extend({
   findAll(): Promise<UserEntity[]> {
@@ -8,6 +10,14 @@ export const UserRepository = dataSource.getRepository(UserEntity).extend({
 
   findById(id: string): Promise<UserEntity | null> {
     return this.findOne({ where: { id } });
+  },
+
+  findByRole(role: Role): Promise<UserEntity[] | null> {
+    return this.findBy({ role: role });
+  },
+
+  findByDepartment(department: Department): Promise<UserEntity[] | null> {
+    return this.findBy({ department: department });
   },
 
   saveObject(obj: UserEntity): Promise<UserEntity> {

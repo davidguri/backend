@@ -10,6 +10,10 @@ export const UniversityRepository = dataSource.getRepository(UniversityEntity).e
     return this.findOneBy({ id });
   },
 
+  findByLocation(location: string): Promise<UniversityEntity[] | null> {
+    return this.findBy({ location: location });
+  },
+
   saveObject(obj: UniversityEntity): Promise<UniversityEntity> {
     return this.save(obj);
   },

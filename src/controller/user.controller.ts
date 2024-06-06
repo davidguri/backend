@@ -3,6 +3,7 @@ import { UserRepository } from '../database/repositories/user.repository';
 import { UniversityRepository } from '../database/repositories/university.repository';
 import { UserEntity } from '../database/entities/user.entity';
 import { UserMapper } from '../database/mappings/user.mapper';
+import { Role } from '../models/user.model';
 
 export class UserController {
   static async getUsers(req: Request, res: Response): Promise<void> {
@@ -29,6 +30,37 @@ export class UserController {
       res.status(500).json({ message: error.message });
     }
   }
+
+  // static async getUsersByRole(req: Request, res: Response): Promise<void> {
+  //   const { role } = req.params;
+
+  //   try {
+  //     const user = await UserRepository.findByRole(role);
+  //     if (user) {
+  //       res.status(200).json(UserMapper.toModel(user));
+  //     } else {
+  //       res.status(404).json({ message: 'User not found :(' });
+  //     }
+  //   } catch (error: any) {
+  //     res.status(500).json({ message: error.message });
+  //   }
+  // }
+
+  // static async getUsersByDepartment(req: Request, res: Response): Promise<void> {
+  //   const { id } = req.params;
+
+  //   try {
+  //     const user = await UserRepository.findById(id);
+  //     if (user) {
+  //       res.status(200).json(UserMapper.toModel(user));
+  //     } else {
+  //       res.status(404).json({ message: 'User not found :(' });
+  //     }
+  //   } catch (error: any) {
+  //     res.status(500).json({ message: error.message });
+  //   }
+  // }
+  // TODO: these don't work due to type errors
 
   static async createUser(req: Request, res: Response): Promise<void> {
     const userModel = req.body;

@@ -19,7 +19,22 @@ export class UniversityController {
       if (university) {
         res.json(university);
       } else {
-        res.status(404).json({ message: 'University not found' });
+        res.status(404).json({ message: 'University not found :(' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async getUniversitiesByLocation(req: Request, res: Response): Promise<void> {
+    const { location } = req.params;
+
+    try {
+      const universities = await UniversityRepository.findByLocation(location);
+      if (universities) {
+        res.json(universities);
+      } else {
+        res.status(404).json({ message: 'Universities not found :(' })
       }
     } catch (error: any) {
       res.status(500).json({ message: error.message });

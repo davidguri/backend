@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn } from "typeorm"
-import Department from "../../models/department.model"
+import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, ManyToOne } from "typeorm";
+import Department from "../../models/department.model";
+
+import { UniversityEntity } from "./university.entity";
 
 @Entity("class")
 export class ClassEntity {
@@ -11,6 +13,9 @@ export class ClassEntity {
 
   @Column()
   department!: Department
+
+  @ManyToOne(() => UniversityEntity, (university) => university.classes)
+  university!: UniversityEntity
 
   @CreateDateColumn()
   createdAt!: Date

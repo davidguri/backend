@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, OneToMany } from "typeorm"
-import { UserEntity } from "./user.entity"
+import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, OneToMany } from "typeorm";
+
+import { UserEntity } from "./user.entity";
+import { ClassEntity } from "./class.entity";
 
 @Entity("university")
 export class UniversityEntity {
@@ -14,6 +16,8 @@ export class UniversityEntity {
 
   @OneToMany(() => UserEntity, (user) => user.university, { nullable: true })
   users?: UserEntity[];
+
+  @OneToMany(() => ClassEntity, (classEntity) => classEntity.university, { nullable: true }) classes?: ClassEntity[];
 
   @CreateDateColumn()
   createdAt!: Date

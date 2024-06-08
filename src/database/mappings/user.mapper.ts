@@ -1,9 +1,10 @@
 import User from "../../models/user.model";
 import { UserEntity } from "../entities/user.entity";
 import { ClassEntity } from "../entities/class.entity";
+import { UniversityEntity } from "../entities/university.entity";
 
 export class UserMapper {
-  static toEntity(model: User, classes: ClassEntity[] = []): UserEntity {
+  static toEntity(model: User, classes: ClassEntity[] = [], university: UniversityEntity): UserEntity {
     const user = new UserEntity();
 
     user.id = model.id;
@@ -13,7 +14,7 @@ export class UserMapper {
     user.department = model.department;
     user.createdAt = model.createdAt;
     user.updatedAt = model.updatedAt;
-    user.university = undefined;
+    user.university = university;
     user.classes = classes
 
     return user;

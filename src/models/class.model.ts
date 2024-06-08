@@ -4,8 +4,8 @@ type Class = {
   id: string;
   name: string;
   department: Department;
-  universityId: string;
-  userId: string[] | null;
+  university: string;
+  users: string[] | null;
   createdAt: Date;
   updatedAt: Date;
 };

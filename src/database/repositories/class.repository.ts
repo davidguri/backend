@@ -3,11 +3,11 @@ import { ClassEntity } from "../entities/class.entity";
 
 export const ClassRepository = dataSource.getRepository(ClassEntity).extend({
   findAll(): Promise<ClassEntity[]> {
-    return this.find();
+    return this.find({ relations: ['university', 'users'] });
   },
 
   findById(id: string): Promise<ClassEntity | null> {
-    return this.findOneBy({ id });
+    return this.findOne({ where: { id }, relations: ['university', 'users'] });
   },
 
   saveObject(obj: ClassEntity): Promise<ClassEntity> {

@@ -1,7 +1,9 @@
 import Department from "../../models/department.model";
-import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, ManyToOne, ManyToMany } from "typeorm";
 import { Role } from "../../models/user.model";
+
 import { UniversityEntity } from "./university.entity";
+import { ClassEntity } from "./class.entity";
 
 @Entity("user")
 export class UserEntity {
@@ -17,6 +19,9 @@ export class UserEntity {
 
   @ManyToOne(() => UniversityEntity, (university) => university.users, { nullable: true })
   university?: UniversityEntity | null
+
+  @ManyToMany(() => ClassEntity, (classObject) => classObject.users, { nullable: true })
+  classes?: ClassEntity[]
 
   @Column()
   role!: Role

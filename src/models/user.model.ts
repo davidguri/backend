@@ -10,7 +10,8 @@ type User = {
   id: string;
   name: string;
   email: string;
-  universityId: string | undefined;
+  universityId: string | null;
+  classIds: string[] | null;
   role: Role;
   department: Department;
   createdAt: Date;

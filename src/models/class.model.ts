@@ -5,6 +5,7 @@ type Class = {
   name: string;
   department: Department;
   universityId: string;
+  userId: string[] | null;
   createdAt: Date;
   updatedAt: Date;
 };

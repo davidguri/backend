@@ -29,7 +29,7 @@ export class UserMapper {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
       universityId: entity.university?.id,
-      classes: entity.classes?.map(c => c.id) || []
+      classes: entity.classes?.map(classObj => classObj.id) || []
     }
   }
 }

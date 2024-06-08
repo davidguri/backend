@@ -1,8 +1,9 @@
 import User from "../../models/user.model";
 import { UserEntity } from "../entities/user.entity";
+import { ClassEntity } from "../entities/class.entity";
 
 export class UserMapper {
-  static toEntity(model: User): UserEntity {
+  static toEntity(model: User, classes: ClassEntity[] = []): UserEntity {
     const user = new UserEntity();
 
     user.id = model.id;
@@ -13,6 +14,7 @@ export class UserMapper {
     user.createdAt = model.createdAt;
     user.updatedAt = model.updatedAt;
     user.university = undefined;
+    user.classes = classes
 
     return user;
   }
@@ -27,6 +29,7 @@ export class UserMapper {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
       universityId: entity.university?.id,
+      classes: entity.classes?.map(c => c.id) || []
     }
   }
 }

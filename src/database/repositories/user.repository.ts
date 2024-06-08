@@ -5,11 +5,11 @@ import Department from "../../models/department.model";
 
 export const UserRepository = dataSource.getRepository(UserEntity).extend({
   findAll(): Promise<UserEntity[]> {
-    return this.find({ relations: ['university'] });
+    return this.find({ relations: ['university', 'classes'] });
   },
 
   findById(id: string): Promise<UserEntity | null> {
-    return this.findOne({ where: { id }, relations: ['university'] });
+    return this.findOne({ where: { id }, relations: ['university', 'classes'] });
   },
 
   findByRole(role: Role): Promise<UserEntity[] | null> {

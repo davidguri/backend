@@ -12,6 +12,16 @@ export const UserRepository = dataSource.getRepository(UserEntity).extend({
     return this.findOne({ where: { id }, relations: ['university', 'classes'] });
   },
 
+  findByUniversity(universityId: string): Promise<UserEntity[] | null> {
+    return this.find({
+      where: {
+        university: {
+          id: universityId,
+        }
+      }
+    })
+  },
+
   findByRole(role: Role): Promise<UserEntity[] | null> {
     return this.find({ where: { role: role } });
   },

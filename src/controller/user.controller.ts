@@ -32,6 +32,22 @@ export class UserController {
     }
   }
 
+  static async getUsersByUniversity(req: Request, res: Response): Promise<void> {
+    const { universityId } = req.params
+
+    try {
+      const users = await UserRepository.findByUniversity(universityId)
+      if (users) {
+        const userModels = users.map(UserMapper.toModel);
+        res.status(200).json(userModels)
+      } else {
+        res.status(404).json({ message: 'User not found :(' })
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message })
+    }
+  }
+
   static async getUsersByRole(req: Request, res: Response): Promise<void> {
     const { role } = req.params;
 

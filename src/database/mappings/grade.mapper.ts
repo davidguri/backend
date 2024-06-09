@@ -19,6 +19,8 @@ export class GradeMapper {
       id: entity.id,
       grade: entity.grade,
       percentage: entity.percentage,
+      class: entity.class.id,
+      user: entity.user.id,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt
     }

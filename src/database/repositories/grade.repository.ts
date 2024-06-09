@@ -10,6 +10,26 @@ export const GradeRepository = dataSource.getRepository(GradeEntity).extend({
     return this.findOneBy({ id });
   },
 
+  findByUser(userId: string): Promise<GradeEntity[] | null> {
+    return this.find({
+      where: {
+        user: {
+          id: userId
+        }
+      }
+    })
+  },
+
+  findByClass(classId: string): Promise<GradeEntity[] | null> {
+    return this.find({
+      where: {
+        class: {
+          id: classId
+        }
+      }
+    })
+  },
+
   saveObject(obj: GradeEntity): Promise<GradeEntity> {
     return this.save(obj);
   },

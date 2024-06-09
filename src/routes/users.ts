@@ -12,22 +12,21 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-// router.get('/:role', async (req: Request, res: Response, next: NextFunction) => {
-//   try {
-//     await UserController.getUsersByRole(req, res);
-//   } catch (error: any) {
-//     next(new CustomError('Failed to get users', 404));
-//   }
-// });
+router.get('/role/:role', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await UserController.getUsersByRole(req, res);
+  } catch (error: any) {
+    next(new CustomError('Failed to get users', 404));
+  }
+});
 
-// router.get('/:department', async (req: Request, res: Response, next: NextFunction) => {
-//   try {
-//     await UserController.getUsersByDepartment(req, res);
-//   } catch (error: any) {
-//     next(new CustomError('Failed to get users', 404));
-//   }
-// });
-// TODO: these don't work due to type errors ../src/controller/user.contoller.ts
+router.get('/department/:department', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await UserController.getUsersByDepartment(req, res);
+  } catch (error: any) {
+    next(new CustomError('Failed to get users', 404));
+  }
+});
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {

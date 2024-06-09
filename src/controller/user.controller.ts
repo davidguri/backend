@@ -4,12 +4,13 @@ import { UniversityRepository } from '../database/repositories/university.reposi
 import { UserEntity } from '../database/entities/user.entity';
 import { UserMapper } from '../database/mappings/user.mapper';
 import { Role } from '../models/user.model';
+import Department from '../models/department.model';
 
 export class UserController {
   static async getUsers(req: Request, res: Response): Promise<void> {
     try {
       const users = await UserRepository.findAll();
-      const userModels = users.map(UserMapper.toModel);
+      const userModels = users?.map(UserMapper.toModel);
       res.status(200).json(userModels);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -31,35 +32,37 @@ export class UserController {
     }
   }
 
-  // static async getUsersByRole(req: Request, res: Response): Promise<void> {
-  //   const { role } = req.params;
+  static async getUsersByRole(req: Request, res: Response): Promise<void> {
+    const { role } = req.params;
 
-  //   try {
-  //     const user = await UserRepository.findByRole(role);
-  //     if (user) {
-  //       res.status(200).json(UserMapper.toModel(user));
-  //     } else {
-  //       res.status(404).json({ message: 'User not found :(' });
-  //     }
-  //   } catch (error: any) {
-  //     res.status(500).json({ message: error.message });
-  //   }
-  // }
+    try {
+      const users = await UserRepository.findByRole(role as Role);
+      if (users) {
+        const userModels = users.map(UserMapper.toModel);
+        res.status(200).json(userModels);
+      } else {
+        res.status(404).json({ message: 'User not found :(' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 
-  // static async getUsersByDepartment(req: Request, res: Response): Promise<void> {
-  //   const { id } = req.params;
+  static async getUsersByDepartment(req: Request, res: Response): Promise<void> {
+    const { department } = req.params;
 
-  //   try {
-  //     const user = await UserRepository.findById(id);
-  //     if (user) {
-  //       res.status(200).json(UserMapper.toModel(user));
-  //     } else {
-  //       res.status(404).json({ message: 'User not found :(' });
-  //     }
-  //   } catch (error: any) {
-  //     res.status(500).json({ message: error.message });
-  //   }
-  // }
+    try {
+      const users = await UserRepository.findByDepartment(department as Department);
+      if (users) {
+        const userModels = users.map(UserMapper.toModel);
+        res.status(200).json(userModels);
+      } else {
+        res.status(404).json({ message: 'User not found :(' });
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
   // TODO: these don't work due to type errors
 
   static async createUser(req: Request, res: Response): Promise<void> {
@@ -75,7 +78,7 @@ export class UserController {
         }
       }
 
-      const user = UserMapper.toEntity(userModel);
+      const user = UserMapper.toEntity(userModel, userModel.classes, userModel.universityId);
       if (university) {
         user.university = university;
       }

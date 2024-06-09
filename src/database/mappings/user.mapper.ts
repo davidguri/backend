@@ -4,7 +4,7 @@ import { ClassEntity } from "../entities/class.entity";
 import { UniversityEntity } from "../entities/university.entity";
 
 export class UserMapper {
-  static toEntity(model: User, classes: ClassEntity[] = [], university: UniversityEntity): UserEntity {
+  static toEntity(model: User, classes: ClassEntity[] = [] || null, university: UniversityEntity): UserEntity {
     const user = new UserEntity();
 
     user.id = model.id;

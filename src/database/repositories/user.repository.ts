@@ -4,7 +4,7 @@ import { Role } from "../../models/user.model";
 import Department from "../../models/department.model";
 
 export const UserRepository = dataSource.getRepository(UserEntity).extend({
-  findAll(): Promise<UserEntity[]> {
+  findAll(): Promise<UserEntity[] | null> {
     return this.find({ relations: ['university', 'classes'] });
   },
 
@@ -13,7 +13,7 @@ export const UserRepository = dataSource.getRepository(UserEntity).extend({
   },
 
   findByRole(role: Role): Promise<UserEntity[] | null> {
-    return this.findBy({ role: role });
+    return this.find({ where: { role: role } });
   },
 
   findByDepartment(department: Department): Promise<UserEntity[] | null> {

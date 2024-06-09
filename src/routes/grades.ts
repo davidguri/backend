@@ -11,6 +11,22 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/user/:id', async (req: Request, res: Response) => {
+  try {
+    await GradeController.getGradesByUser(req, res);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/class/:id', async (req: Request, res: Response) => {
+  try {
+    await GradeController.getGradesByClass(req, res);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 router.get('/', async (req: Request, res: Response) => {
   try {
     await GradeController.getGrades(req, res);

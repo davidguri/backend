@@ -11,6 +11,22 @@ router.post('/:id', async (req: Request, res: Response) => {
   }
 });
 
+router.post('/university/:id', async (req: Request, res: Response) => {
+  try {
+    await ClassController.getClassesByUniversity(req, res);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/user/:id', async (req: Request, res: Response) => {
+  try {
+    await ClassController.getClassesByUser(req, res);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.get('/', async (req: Request, res: Response) => {
   try {
     await ClassController.getClasses(req, res);

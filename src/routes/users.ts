@@ -12,6 +12,14 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
+router.get('/university/:university', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    await UserController.getUsersByUniversity(req, res);
+  } catch (error: any) {
+    next(new CustomError('Failed to get users', 404));
+  }
+});
+
 router.get('/role/:role', async (req: Request, res: Response, next: NextFunction) => {
   try {
     await UserController.getUsersByRole(req, res);

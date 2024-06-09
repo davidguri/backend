@@ -28,6 +28,38 @@ export class GradeController {
     }
   }
 
+  static async getGradesByUser(req: Request, res: Response): Promise<void> {
+    const { userId } = req.params;
+
+    try {
+      const grades = await GradeRepository.findByUser(userId)
+      if (grades) {
+        const gradeModels = grades.map(GradeMapper.toModel)
+        res.status(200).json(gradeModels)
+      } else {
+        res.status(404).json({ message: "Grades not found :(" })
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message })
+    }
+  }
+
+  static async getGradesByClass(req: Request, res: Response): Promise<void> {
+    const { classId } = req.params;
+
+    try {
+      const grades = await GradeRepository.findByClass(classId)
+      if (grades) {
+        const gradeModels = grades.map(GradeMapper.toModel)
+        res.status(200).json(gradeModels)
+      } else {
+        res.status(404).json({ message: "Grades not found :(" })
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message })
+    }
+  }
+
   static async createGrade(req: Request, res: Response): Promise<void> {
     const gradeModel = req.body;
 

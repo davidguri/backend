@@ -29,6 +29,38 @@ export class ClassController {
     }
   }
 
+  static async getClassesByUniversity(req: Request, res: Response): Promise<void> {
+    const { universityId } = req.params;
+
+    try {
+      const classes = await ClassRepository.findByUniversity(universityId);
+      if (classes) {
+        const classModels = classes.map(ClassMapper.toModel);
+        res.status(200).json(classModels);
+      } else {
+        res.status(404).json({ message: "Class not found :(" })
+      }
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async getClassesByUser(req: Request, res: Response): Promise<void> {
+    const { userId } = req.params;
+
+    try {
+      const classes = await ClassRepository.findByUser(userId)
+      if (classes) {
+        const classModels = classes.map(ClassMapper.toModel);
+        res.status(200).json(classModels);
+      } else {
+        res.status(404).json({ message: "Class not found :(" })
+      }
+    } catch (error: any) {
+
+    }
+  }
+
   static async createClass(req: Request, res: Response): Promise<void> {
     const classModel = req.body;
 

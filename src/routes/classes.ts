@@ -3,7 +3,7 @@ import { ClassController } from "../controller/class.controller";
 
 export const router = express.Router();
 
-router.post('/:id', async (req: Request, res: Response) => {
+router.get('/:id', async (req: Request, res: Response) => {
   try {
     await ClassController.getClassesById(req, res);
   } catch (error: any) {
@@ -11,7 +11,7 @@ router.post('/:id', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/university/:id', async (req: Request, res: Response) => {
+router.get('/university/:id', async (req: Request, res: Response) => {
   try {
     await ClassController.getClassesByUniversity(req, res);
   } catch (error: any) {
@@ -19,7 +19,7 @@ router.post('/university/:id', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/user/:id', async (req: Request, res: Response) => {
+router.get('/user/:id', async (req: Request, res: Response) => {
   try {
     await ClassController.getClassesByUser(req, res);
   } catch (error: any) {

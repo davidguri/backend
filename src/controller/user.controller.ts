@@ -79,7 +79,6 @@ export class UserController {
       res.status(500).json({ message: error.message });
     }
   }
-  // TODO: these don't work due to type errors
 
   static async createUser(req: Request, res: Response): Promise<void> {
     const userModel = req.body;
@@ -87,7 +86,7 @@ export class UserController {
     try {
       let university;
       if (userModel.universityId) {
-        university = await UniversityRepository.findOneBy({ id: userModel.universityId }); // TODO: Change university repo too
+        university = await UniversityRepository.findOneBy({ id: userModel.universityId });
         if (!university) {
           res.status(404).json({ message: 'University not found' });
           return;

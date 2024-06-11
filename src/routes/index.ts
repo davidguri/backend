@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.use('/universities', universityRoutes)
 router.use('/users', usersRoutes)
-router.use('/class', classRoutes)
-router.use('/grade', gradeRoutes)
+router.use('/classes', classRoutes)
+router.use('/grades', gradeRoutes)
 
 export default router

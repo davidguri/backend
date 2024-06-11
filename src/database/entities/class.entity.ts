@@ -19,7 +19,7 @@ export class ClassEntity {
   university!: UniversityEntity
 
   @ManyToMany(() => UserEntity, (users) => users.classes)
-  users?: UserEntity[]
+  users!: UserEntity[]
 
   @CreateDateColumn()
   createdAt!: Date

@@ -4,8 +4,9 @@ import { GradeMapper } from "../mappings/grade.mapper";
 import Grade from "../../models/grade.model";
 
 export const GradeRepository = dataSource.getRepository(GradeEntity).extend({
-  async findAll(): Promise<Grade[] | null> {
-    return (await this.find({ relations: ['class', 'user'] })).map(GradeMapper.toModel);
+  async findAll(): Promise<Grade[]> {
+    const result = await this.find({ relations: ['classId', 'userId'] })
+    return result;
   },
 
   async findById(id: string): Promise<GradeEntity | null> {
@@ -16,9 +17,7 @@ export const GradeRepository = dataSource.getRepository(GradeEntity).extend({
     return (
       await this.find({
         where: {
-          user: {
-            id: userId
-          }
+          userId: userId
         }
       })
     ).map(GradeMapper.toModel)
@@ -28,17 +27,17 @@ export const GradeRepository = dataSource.getRepository(GradeEntity).extend({
     return (
       await this.find({
         where: {
-          class: {
-            id: classId
-          }
+          classId: classId
         }
       })
     ).map(GradeMapper.toModel)
   },
 
-  async saveObject(obj: GradeEntity): Promise<Grade> {
+  async saveObject(obj: Grade): Promise<Grade> {
+    const grade = GradeMapper.toEntity(obj)
+
     return (
-      GradeMapper.toModel(await this.save(obj))
+      GradeMapper.toModel(await this.save(grade))
     );
   },
 

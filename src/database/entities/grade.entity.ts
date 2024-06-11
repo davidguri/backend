@@ -14,12 +14,12 @@ export class GradeEntity {
   percentage!: number
 
   @OneToOne(() => UserEntity)
-  @JoinColumn()
-  user!: UserEntity
+  @JoinColumn({ name: "userId" })
+  userId!: string
 
   @OneToOne(() => ClassEntity)
-  @JoinColumn()
-  class!: ClassEntity
+  @JoinColumn({ name: "classId" })
+  classId!: string
 
   @CreateDateColumn()
   createdAt!: Date

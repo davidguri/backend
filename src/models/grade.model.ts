@@ -2,8 +2,8 @@ type Grade = {
   id: string;
   grade: number;
   percentage: number;
-  class: string;
-  user: string;
+  classId: string;
+  userId: string;
   createdAt: Date;
   updatedAt: Date;
 };

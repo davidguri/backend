@@ -13,7 +13,7 @@ export class ClassMapper {
     classObj.createdAt = model.createdAt;
     classObj.updatedAt = model.updatedAt;
     classObj.university = university;
-    classObj.users = users || null;
+    classObj.users = users;
 
 
     return classObj;
@@ -27,7 +27,7 @@ export class ClassMapper {
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
       university: entity.university.id,
-      users: entity.users?.map(user => user.id) || null
+      users: entity.users.map(user => user.id)
     }
   }
 }

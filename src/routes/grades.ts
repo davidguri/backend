@@ -29,7 +29,8 @@ router.get('/class/:id', async (req: Request, res: Response) => {
 
 router.get('/', async (req: Request, res: Response) => {
   try {
-    await GradeController.getGrades(req, res);
+    const grades = await GradeController.getGrades();
+    res.status(200).json({ grades });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -51,7 +52,7 @@ router.put('/', async (req: Request, res: Response) => {
   }
 });
 
-router.delete('/', async (req: Request, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response) => {
   try {
     await GradeController.deleteGrade(req, res);
   } catch (error: any) {

@@ -1,17 +1,11 @@
 import { Request, Response } from "express";
 import { GradeRepository } from "../database/repositories/grade.repository";
 import { GradeMapper } from "../database/mappings/grade.mapper";
-import { ClassEntity } from "../database/entities/class.entity";
-import { UserEntity } from "../database/entities/user.entity";
+import Grade from "../models/grade.model";
 
 export class GradeController {
-  static async getGrades(req: Request, res: Response): Promise<void> {
-    try {
-      const grades = await GradeRepository.findAll();
-      res.status(200).json(grades);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+  static async getGrades(): Promise<Grade[]> {
+    return await GradeRepository.findAll();
   }
 
   static async getGradesById(req: Request, res: Response): Promise<void> {
@@ -60,11 +54,11 @@ export class GradeController {
   }
 
   static async createGrade(req: Request, res: Response): Promise<void> {
-    const gradeModel = req.body;
+    const grade = req.body;
+
+    console.log(grade);
 
     try {
-      const grade = GradeMapper.toEntity(gradeModel, gradeModel.class, gradeModel.user)
-
       const savedGrade = await GradeRepository.saveObject(grade);
       res.status(201).json(savedGrade);
     } catch (error: any) {

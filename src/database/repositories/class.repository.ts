@@ -1,28 +1,36 @@
 import { dataSource } from "../../typeorm.config";
 import { ClassEntity } from "../entities/class.entity";
+import Class from "../../models/class.model";
+import { ClassMapper } from "../mappings/class.mapper";
 
 export const ClassRepository = dataSource.getRepository(ClassEntity).extend({
-  findAll(): Promise<ClassEntity[]> {
-    return this.find({ relations: ['university', 'users'] });
+  async findAll(): Promise<Class[]> {
+    return (
+      await this.find({ relations: ['university'] })
+    )?.map(ClassMapper.toModel);
   },
 
-  findById(id: string): Promise<ClassEntity | null> {
-    return this.findOne({ where: { id }, relations: ['university', 'users'] });
+  async findById(id: string): Promise<ClassEntity | null> {
+    return await this.findOne({ where: { id }, relations: ['university', 'users'] });
   },
 
-  findByUser(userId: string): Promise<ClassEntity[] | null> {
-    return this.find({ where: { users: { id: userId } }, relations: ['university', 'users'] });
+  async findByUser(userId: string): Promise<Class[] | null> {
+    return (
+      await this.find({ where: { users: { id: userId } }, relations: ['university', 'users'] })
+    ).map(ClassMapper.toModel);
   },
 
-  findByUniversity(universityId: string): Promise<ClassEntity[] | null> {
-    return this.find({ where: { university: { id: universityId } }, relations: ['university', 'users'] });
+  async findByUniversity(universityId: string): Promise<Class[] | null> {
+    return (
+      await this.find({ where: { university: { id: universityId } }, relations: ['university', 'users'] })
+    ).map(ClassMapper.toModel);
   },
 
-  saveObject(obj: ClassEntity): Promise<ClassEntity> {
-    return this.save(obj);
+  async saveObject(obj: ClassEntity): Promise<Class> {
+    return ClassMapper.toModel(await this.save(obj));
   },
 
-  removeObject(obj: ClassEntity): Promise<ClassEntity> {
-    return this.remove(obj);
+  async removeObject(obj: ClassEntity): Promise<ClassEntity> {
+    return await this.remove(obj);
   },
 });

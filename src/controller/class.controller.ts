@@ -7,8 +7,7 @@ export class ClassController {
   static async getClasses(req: Request, res: Response): Promise<void> {
     try {
       const classes = await ClassRepository.findAll()
-      const classModels = classes.map(ClassMapper.toModel)
-      res.status(200).json(classModels)
+      res.status(200).json(classes)
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -35,8 +34,7 @@ export class ClassController {
     try {
       const classes = await ClassRepository.findByUniversity(universityId);
       if (classes) {
-        const classModels = classes.map(ClassMapper.toModel);
-        res.status(200).json(classModels);
+        res.status(200).json(classes);
       } else {
         res.status(404).json({ message: "Class not found :(" })
       }
@@ -51,8 +49,7 @@ export class ClassController {
     try {
       const classes = await ClassRepository.findByUser(userId)
       if (classes) {
-        const classModels = classes.map(ClassMapper.toModel);
-        res.status(200).json(classModels);
+        res.status(200).json(classes);
       } else {
         res.status(404).json({ message: "Class not found :(" })
       }
@@ -68,7 +65,7 @@ export class ClassController {
       const classObj = ClassMapper.toEntity(classModel, classModel.users, classModel.university)
 
       const savedClass = await ClassRepository.saveObject(classObj);
-      res.status(201).json(ClassMapper.toModel(savedClass));
+      res.status(201).json(savedClass);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -91,7 +88,7 @@ export class ClassController {
       classObj.updatedAt = classModel.updatedAt || classObj.updatedAt;
 
       const updatedClass = await ClassRepository.saveObject(classObj);
-      res.status(200).json(ClassMapper.toModel(updatedClass))
+      res.status(200).json(updatedClass)
     } catch (error: any) {
       res.status(500).json({ message: error.message })
     }

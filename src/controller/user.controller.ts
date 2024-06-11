@@ -10,8 +10,7 @@ export class UserController {
   static async getUsers(req: Request, res: Response): Promise<void> {
     try {
       const users = await UserRepository.findAll();
-      const userModels = users?.map(UserMapper.toModel);
-      res.status(200).json(userModels);
+      res.status(200).json(users);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -38,8 +37,7 @@ export class UserController {
     try {
       const users = await UserRepository.findByUniversity(universityId)
       if (users) {
-        const userModels = users.map(UserMapper.toModel);
-        res.status(200).json(userModels)
+        res.status(200).json(users)
       } else {
         res.status(404).json({ message: 'User not found :(' })
       }
@@ -54,8 +52,7 @@ export class UserController {
     try {
       const users = await UserRepository.findByRole(role as Role);
       if (users) {
-        const userModels = users.map(UserMapper.toModel);
-        res.status(200).json(userModels);
+        res.status(200).json(users);
       } else {
         res.status(404).json({ message: 'User not found :(' });
       }
@@ -70,8 +67,7 @@ export class UserController {
     try {
       const users = await UserRepository.findByDepartment(department as Department);
       if (users) {
-        const userModels = users.map(UserMapper.toModel);
-        res.status(200).json(userModels);
+        res.status(200).json(users);
       } else {
         res.status(404).json({ message: 'User not found :(' });
       }
@@ -99,7 +95,7 @@ export class UserController {
       }
 
       const savedUser = await UserRepository.saveObject(user);
-      res.status(201).json(UserMapper.toModel(savedUser));
+      res.status(201).json(savedUser);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -125,7 +121,7 @@ export class UserController {
       user.updatedAt = userModel.updatedAt || user.updatedAt;
 
       const updatedUser = await UserRepository.saveObject(user);
-      res.status(200).json(UserMapper.toModel(updatedUser));
+      res.status(200).json(updatedUser);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -154,12 +150,12 @@ export class UserController {
 
     try {
       const user = await UserRepository.findById(userId);
-      const university = await UniversityRepository.findOneBy({ id: universityId }); // TODO: Change university repo too
+      const university = await UniversityRepository.findOneBy({ id: universityId });
 
       if (user && university) {
         user.university = university;
         const updatedUser = await UserRepository.saveObject(user);
-        res.status(200).json(UserMapper.toModel(updatedUser))
+        res.status(200).json(updatedUser)
       } else {
         res.status(404).json({ message: "User or University not found :(" })
       }
@@ -182,7 +178,7 @@ export class UserController {
       user.university = null;
       const updatedUser = await UserRepository.save(user);
 
-      res.status(200).json(UserMapper.toModel(updatedUser));
+      res.status(200).json(updatedUser);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

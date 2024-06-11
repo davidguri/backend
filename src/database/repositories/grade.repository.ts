@@ -1,40 +1,48 @@
 import { dataSource } from "../../typeorm.config";
 import { GradeEntity } from "../entities/grade.entity";
+import { GradeMapper } from "../mappings/grade.mapper";
+import Grade from "../../models/grade.model";
 
 export const GradeRepository = dataSource.getRepository(GradeEntity).extend({
-  findAll(): Promise<GradeEntity[]> {
-    return this.find();
+  async findAll(): Promise<Grade[] | null> {
+    return (await this.find({ relations: ['class', 'user'] })).map(GradeMapper.toModel);
   },
 
-  findById(id: string): Promise<GradeEntity | null> {
-    return this.findOneBy({ id });
+  async findById(id: string): Promise<GradeEntity | null> {
+    return await this.findOneBy({ id });
   },
 
-  findByUser(userId: string): Promise<GradeEntity[] | null> {
-    return this.find({
-      where: {
-        user: {
-          id: userId
+  async findByUser(userId: string): Promise<Grade[] | null> {
+    return (
+      await this.find({
+        where: {
+          user: {
+            id: userId
+          }
         }
-      }
-    })
+      })
+    ).map(GradeMapper.toModel)
   },
 
-  findByClass(classId: string): Promise<GradeEntity[] | null> {
-    return this.find({
-      where: {
-        class: {
-          id: classId
+  async findByClass(classId: string): Promise<Grade[] | null> {
+    return (
+      await this.find({
+        where: {
+          class: {
+            id: classId
+          }
         }
-      }
-    })
+      })
+    ).map(GradeMapper.toModel)
   },
 
-  saveObject(obj: GradeEntity): Promise<GradeEntity> {
-    return this.save(obj);
+  async saveObject(obj: GradeEntity): Promise<Grade> {
+    return (
+      GradeMapper.toModel(await this.save(obj))
+    );
   },
 
-  removeObject(obj: GradeEntity): Promise<GradeEntity> {
-    return this.remove(obj);
+  async removeObject(obj: GradeEntity): Promise<GradeEntity> {
+    return await this.remove(obj);
   }
 });

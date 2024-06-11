@@ -1,24 +1,27 @@
 import { dataSource } from "../../typeorm.config";
 import { UniversityEntity } from "../entities/university.entity";
+import { UniversityMapper } from "../mappings/university.mapper";
 
 export const UniversityRepository = dataSource.getRepository(UniversityEntity).extend({
-  findAll(): Promise<UniversityEntity[]> {
-    return this.find();
+  async findAll(): Promise<UniversityEntity[]> {
+    return (await this.find())?.map(UniversityMapper.toModel);
   },
 
-  findById(id: string): Promise<UniversityEntity | null> {
-    return this.findOneBy({ id });
+  async findById(id: string): Promise<UniversityEntity | null> {
+    return await this.findOneBy({ id });
   },
 
-  findByLocation(location: string): Promise<UniversityEntity[] | null> {
-    return this.findBy({ location: location });
+  async findByLocation(location: string): Promise<UniversityEntity[] | null> {
+    return (
+      (await this.findBy({ location: location }))?.map(UniversityMapper.toModel)
+    );
   },
 
-  saveObject(obj: UniversityEntity): Promise<UniversityEntity> {
-    return this.save(obj);
+  async saveObject(obj: UniversityEntity): Promise<UniversityEntity> {
+    return await this.save(obj);
   },
 
-  removeObject(obj: UniversityEntity): Promise<UniversityEntity> {
-    return this.remove(obj);
+  async removeObject(obj: UniversityEntity): Promise<UniversityEntity> {
+    return await this.remove(obj);
   },
 });

@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { GradeRepository } from "../database/repositories/grade.repository";
 import { GradeMapper } from "../database/mappings/grade.mapper";
+import { ClassEntity } from "../database/entities/class.entity";
+import { UserEntity } from "../database/entities/user.entity";
 
 export class GradeController {
   static async getGrades(req: Request, res: Response): Promise<void> {
     try {
       const grades = await GradeRepository.findAll();
-      const gradeModels = grades.map(GradeMapper.toModel);
-      res.status(200).json(gradeModels);
+      res.status(200).json(grades);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -34,8 +35,7 @@ export class GradeController {
     try {
       const grades = await GradeRepository.findByUser(userId)
       if (grades) {
-        const gradeModels = grades.map(GradeMapper.toModel)
-        res.status(200).json(gradeModels)
+        res.status(200).json(grades)
       } else {
         res.status(404).json({ message: "Grades not found :(" })
       }
@@ -50,8 +50,7 @@ export class GradeController {
     try {
       const grades = await GradeRepository.findByClass(classId)
       if (grades) {
-        const gradeModels = grades.map(GradeMapper.toModel)
-        res.status(200).json(gradeModels)
+        res.status(200).json(grades)
       } else {
         res.status(404).json({ message: "Grades not found :(" })
       }
@@ -64,10 +63,10 @@ export class GradeController {
     const gradeModel = req.body;
 
     try {
-      const grade = GradeMapper.toEntity(gradeModel)
+      const grade = GradeMapper.toEntity(gradeModel, gradeModel.class, gradeModel.user)
 
       const savedGrade = await GradeRepository.saveObject(grade);
-      res.status(201).json(GradeMapper.toModel(savedGrade));
+      res.status(201).json(savedGrade);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

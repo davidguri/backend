@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import { UniversityRepository } from "../database/repositories/university.repository";
 import { UniversityEntity } from "../database/entities/university.entity";
+import { UniversityMapper } from "../database/mappings/university.mapper";
 
 export class UniversityController {
   static async getUniversities(req: Request, res: Response): Promise<void> {
     try {
-      const universities = await UniversityRepository.find();
+      const universities = await UniversityRepository.findAll();
       res.json(universities);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -32,7 +33,7 @@ export class UniversityController {
     try {
       const universities = await UniversityRepository.findByLocation(location);
       if (universities) {
-        res.json(universities);
+        res.status(200).json(universities);
       } else {
         res.status(404).json({ message: 'Universities not found :(' })
       }

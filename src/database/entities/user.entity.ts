@@ -17,7 +17,7 @@ export class UserEntity {
   @Column()
   email!: string
 
-  @ManyToOne(() => UniversityEntity, (university) => university.users, { nullable: true })
+  @ManyToOne(() => UniversityEntity, (university) => university.users)
   university?: UniversityEntity | null
 
   @ManyToMany(() => ClassEntity, (classObject) => classObject.users, { nullable: true })

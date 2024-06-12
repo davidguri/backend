@@ -4,7 +4,7 @@ import { UniversityMapper } from "../mappings/university.mapper";
 
 export const UniversityRepository = dataSource.getRepository(UniversityEntity).extend({
   async findAll(): Promise<UniversityEntity[] | null> {
-    return (await this.find())?.map(UniversityMapper.toModel);
+    return (await this.find({ relations: ['users', 'classes'] }))?.map(UniversityMapper.toModel);
   },
 
   async findById(id: string): Promise<UniversityEntity | null> {

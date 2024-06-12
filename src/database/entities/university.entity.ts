@@ -14,10 +14,11 @@ export class UniversityEntity {
   @Column()
   location!: string
 
-  @OneToMany(() => UserEntity, (user) => user.university, { nullable: true })
+  @OneToMany(() => UserEntity, (user) => user.university)
   users?: UserEntity[];
 
-  @OneToMany(() => ClassEntity, (classEntity) => classEntity.university, { nullable: true }) classes?: ClassEntity[];
+  @OneToMany(() => ClassEntity, (classEntity) => classEntity.university)
+  classes?: ClassEntity[];
 
   @CreateDateColumn()
   createdAt!: Date

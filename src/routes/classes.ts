@@ -13,7 +13,12 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 router.get('/university/:id', async (req: Request, res: Response) => {
   try {
-    await ClassController.getClassesByUniversity(req, res);
+    const classes = await ClassController.getClassesByUniversity(req, res);
+    if (classes) {
+      res.status(200).json(classes);
+    } else {
+      res.status(404).json({ message: "Class not found :(" })
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -21,15 +26,21 @@ router.get('/university/:id', async (req: Request, res: Response) => {
 
 router.get('/user/:id', async (req: Request, res: Response) => {
   try {
-    await ClassController.getClassesByUser(req, res);
+    const classes = await ClassController.getClassesByUser(req, res);
+    if (classes) {
+      res.status(200).json(classes);
+    } else {
+      res.status(404).json({ message: "Class not found :(" })
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', async (res: Response) => {
   try {
-    await ClassController.getClasses(req, res);
+    const classes = await ClassController.getClasses();
+    res.status(200).json(classes)
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

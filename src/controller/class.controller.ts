@@ -2,15 +2,11 @@ import { Request, Response } from "express";
 import { ClassRepository } from "../database/repositories/class.repository";
 import { ClassEntity } from "../database/entities/class.entity";
 import { ClassMapper } from "../database/mappings/class.mapper";
+import Class from "../models/class.model";
 
 export class ClassController {
-  static async getClasses(req: Request, res: Response): Promise<void> {
-    try {
-      const classes = await ClassRepository.findAll()
-      res.status(200).json(classes)
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+  static async getClasses(): Promise<Class[] | null> {
+    return await ClassRepository.findAll()
   }
 
   static async getClassesById(req: Request, res: Response): Promise<void> {
@@ -28,34 +24,16 @@ export class ClassController {
     }
   }
 
-  static async getClassesByUniversity(req: Request, res: Response): Promise<void> {
+  static async getClassesByUniversity(req: Request, res: Response): Promise<Class[] | null> {
     const { universityId } = req.params;
 
-    try {
-      const classes = await ClassRepository.findByUniversity(universityId);
-      if (classes) {
-        res.status(200).json(classes);
-      } else {
-        res.status(404).json({ message: "Class not found :(" })
-      }
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+    return ClassRepository.findByUniversity(universityId);
   }
 
-  static async getClassesByUser(req: Request, res: Response): Promise<void> {
+  static async getClassesByUser(req: Request, res: Response): Promise<Class[] | null> {
     const { userId } = req.params;
 
-    try {
-      const classes = await ClassRepository.findByUser(userId)
-      if (classes) {
-        res.status(200).json(classes);
-      } else {
-        res.status(404).json({ message: "Class not found :(" })
-      }
-    } catch (error: any) {
-
-    }
+    return ClassRepository.findByUser(userId);
   }
 
   static async createClass(req: Request, res: Response): Promise<void> {

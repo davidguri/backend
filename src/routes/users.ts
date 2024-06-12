@@ -8,37 +8,53 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     await UserController.getUsersById(req, res);
   } catch (error: any) {
-    next(new CustomError('Failed to get users', 404));
+    res.status(500).json({ message: error.message });
   }
 });
 
 router.get('/university/:university', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await UserController.getUsersByUniversity(req, res);
+    const users = await UserController.getUsersByUniversity(req);
+    if (users) {
+      res.status(200).json(users)
+    } else {
+      res.status(404).json({ message: 'User not found :(' })
+    }
   } catch (error: any) {
-    next(new CustomError('Failed to get users', 404));
+    res.status(500).json({ message: error.message })
   }
 });
 
 router.get('/role/:role', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await UserController.getUsersByRole(req, res);
+    const users = await UserController.getUsersByRole(req, res);
+    if (users) {
+      res.status(200).json(users);
+    } else {
+      res.status(404).json({ message: 'User not found :(' });
+    }
   } catch (error: any) {
-    next(new CustomError('Failed to get users', 404));
+    res.status(500).json({ message: error.message });
   }
 });
 
 router.get('/department/:department', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await UserController.getUsersByDepartment(req, res);
+    const users = await UserController.getUsersByDepartment(req, res);
+    if (users) {
+      res.status(200).json(users);
+    } else {
+      res.status(404).json({ message: 'User not found :(' });
+    }
   } catch (error: any) {
-    next(new CustomError('Failed to get users', 404));
+    res.status(500).json({ message: error.message });
   }
 });
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await UserController.getUsers(req, res);
+    const users = await UserController.getUsers();
+    res.status(200).json(users);
   } catch (error: any) {
     next(new CustomError('Failed to get users', 500));
   }
@@ -65,14 +81,6 @@ router.delete('/:id', async (req: Request, res: Response, next: NextFunction) =>
     await UserController.deleteUser(req, res);
   } catch (error: any) {
     next(new CustomError('Failed to delete user', 500));
-  }
-});
-
-router.post('/setUserUniversity', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await UserController.setUserUniversity(req, res);
-  } catch (error: any) {
-    next(new CustomError('Failed to set user university', 500));
   }
 });
 

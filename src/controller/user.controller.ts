@@ -5,15 +5,11 @@ import { UserEntity } from '../database/entities/user.entity';
 import { UserMapper } from '../database/mappings/user.mapper';
 import { Role } from '../models/user.model';
 import Department from '../models/department.model';
+import User from '../models/user.model';
 
 export class UserController {
-  static async getUsers(req: Request, res: Response): Promise<void> {
-    try {
-      const users = await UserRepository.findAll();
-      res.status(200).json(users);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+  static async getUsers(): Promise<User[] | null> {
+    return await UserRepository.findAll()
   }
 
   static async getUsersById(req: Request, res: Response): Promise<void> {
@@ -31,49 +27,22 @@ export class UserController {
     }
   }
 
-  static async getUsersByUniversity(req: Request, res: Response): Promise<void> {
+  static async getUsersByUniversity(req: Request): Promise<User[] | null> {
     const { universityId } = req.params
 
-    try {
-      const users = await UserRepository.findByUniversity(universityId)
-      if (users) {
-        res.status(200).json(users)
-      } else {
-        res.status(404).json({ message: 'User not found :(' })
-      }
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
-    }
+    return await UserRepository.findByUniversity(universityId)
   }
 
-  static async getUsersByRole(req: Request, res: Response): Promise<void> {
+  static async getUsersByRole(req: Request, res: Response): Promise<User[] | null> {
     const { role } = req.params;
 
-    try {
-      const users = await UserRepository.findByRole(role as Role);
-      if (users) {
-        res.status(200).json(users);
-      } else {
-        res.status(404).json({ message: 'User not found :(' });
-      }
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+    return await UserRepository.findByRole(role as Role)
   }
 
-  static async getUsersByDepartment(req: Request, res: Response): Promise<void> {
+  static async getUsersByDepartment(req: Request, res: Response): Promise<User[] | null> {
     const { department } = req.params;
 
-    try {
-      const users = await UserRepository.findByDepartment(department as Department);
-      if (users) {
-        res.status(200).json(users);
-      } else {
-        res.status(404).json({ message: 'User not found :(' });
-      }
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+    return await UserRepository.findByDepartment(department as Department);
   }
 
   static async createUser(req: Request, res: Response): Promise<void> {
@@ -140,45 +109,6 @@ export class UserController {
 
       await UserRepository.removeObject(user);
       res.status(200).json({ message: 'User deleted successfully' });
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  }
-
-  static async setUserUniversity(req: Request, res: Response): Promise<void> {
-    const { userId, universityId } = req.body;
-
-    try {
-      const user = await UserRepository.findById(userId);
-      const university = await UniversityRepository.findOneBy({ id: universityId });
-
-      if (user && university) {
-        user.university = university;
-        const updatedUser = await UserRepository.saveObject(user);
-        res.status(200).json(updatedUser)
-      } else {
-        res.status(404).json({ message: "User or University not found :(" })
-      }
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
-  }
-
-  static async removeUserUniversity(req: Request, res: Response): Promise<void> {
-    const { userId } = req.body;
-
-    try {
-      const user = await UserRepository.findOneBy({ id: userId });
-
-      if (!user) {
-        res.status(404).json({ message: 'User not found' });
-        return;
-      }
-
-      user.university = null;
-      const updatedUser = await UserRepository.save(user);
-
-      res.status(200).json(updatedUser);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

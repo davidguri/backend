@@ -2,47 +2,26 @@ import { Request, Response } from "express";
 import { UniversityRepository } from "../database/repositories/university.repository";
 import { UniversityEntity } from "../database/entities/university.entity";
 import { UniversityMapper } from "../database/mappings/university.mapper";
+import University from "../models/university.model";
 
 export class UniversityController {
-  static async getUniversities(req: Request, res: Response): Promise<void> {
-    try {
-      const universities = await UniversityRepository.findAll();
-      res.json(universities);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+  static async getUniversities(): Promise<University[]> {
+    return await UniversityRepository.findAll();
   }
 
-  static async getUniversitiesById(req: Request, res: Response): Promise<void> {
+  static async getUniversitiesById(req: Request): Promise<University | null> {
     const { id } = req.params;
-    try {
-      const university = await UniversityRepository.findById(id);
-      if (university) {
-        res.json(university);
-      } else {
-        res.status(404).json({ message: 'University not found :(' });
-      }
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+
+    return await UniversityRepository.findById(id);
   }
 
-  static async getUniversitiesByLocation(req: Request, res: Response): Promise<void> {
+  static async getUniversitiesByLocation(req: Request): Promise<University[] | null> {
     const { location } = req.params;
 
-    try {
-      const universities = await UniversityRepository.findByLocation(location);
-      if (universities) {
-        res.status(200).json(universities);
-      } else {
-        res.status(404).json({ message: 'Universities not found :(' })
-      }
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+    return await UniversityRepository.findByLocation(location);
   }
 
-  static async createUniversity(req: Request, res: Response): Promise<void> {
+  static async createUniversity(req: Request): Promise<University> {
     const { id, name, location, createdAt, updatedAt } = req.body;
 
     const university = new UniversityEntity;
@@ -52,12 +31,7 @@ export class UniversityController {
     university.createdAt = createdAt;
     university.updatedAt = updatedAt;
 
-    try {
-      const savedUniversity = await UniversityRepository.saveObject(university);
-      res.status(201).json(savedUniversity);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+    return await UniversityRepository.saveObject(university);
   }
 
   static async updateUniversity(req: Request, res: Response): Promise<void> {
@@ -68,7 +42,7 @@ export class UniversityController {
       const university = await UniversityRepository.findById(id);
 
       if (!university) {
-        res.status(404).json({ message: 'University not found' });
+        res.status(404).json({ message: 'University not found :(' });
         return;
       }
 

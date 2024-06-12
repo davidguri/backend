@@ -5,7 +5,13 @@ export const router = express.Router();
 
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    await UniversityController.getUniversitiesById(req, res);
+    const university = await UniversityController.getUniversitiesById(req);
+
+    if (university) {
+      res.json(university)
+    } else {
+      res.status(404).json({ message: 'University not found :(' });
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -13,7 +19,13 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 router.get('/location/:location', async (req: Request, res: Response) => {
   try {
-    await UniversityController.getUniversitiesByLocation(req, res);
+    const universities = await UniversityController.getUniversitiesByLocation(req);
+
+    if (universities) {
+      res.status(200).json(universities);
+    } else {
+      res.status(404).json({ message: 'Universities not found :(' })
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -22,7 +34,8 @@ router.get('/location/:location', async (req: Request, res: Response) => {
 
 router.get('/', async (req: Request, res: Response) => {
   try {
-    await UniversityController.getUniversities(req, res);
+    const universities = await UniversityController.getUniversities();
+    res.status(200).json({ universities })
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -30,7 +43,8 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
   try {
-    await UniversityController.createUniversity(req, res);
+    const savedUniversity = await UniversityController.createUniversity(req);
+    res.status(201).json({ savedUniversity })
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

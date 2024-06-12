@@ -4,7 +4,7 @@ import { GradeMapper } from "../database/mappings/grade.mapper";
 import Grade from "../models/grade.model";
 
 export class GradeController {
-  static async getGrades(): Promise<Grade[]> {
+  static async getGrades(): Promise<Grade[] | null> {
     return await GradeRepository.findAll();
   }
 

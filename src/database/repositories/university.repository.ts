@@ -3,7 +3,7 @@ import { UniversityEntity } from "../entities/university.entity";
 import { UniversityMapper } from "../mappings/university.mapper";
 
 export const UniversityRepository = dataSource.getRepository(UniversityEntity).extend({
-  async findAll(): Promise<UniversityEntity[]> {
+  async findAll(): Promise<UniversityEntity[] | null> {
     return (await this.find())?.map(UniversityMapper.toModel);
   },
 

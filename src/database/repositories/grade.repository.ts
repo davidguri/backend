@@ -4,7 +4,7 @@ import { GradeMapper } from "../mappings/grade.mapper";
 import Grade from "../../models/grade.model";
 
 export const GradeRepository = dataSource.getRepository(GradeEntity).extend({
-  async findAll(): Promise<Grade[]> {
+  async findAll(): Promise<Grade[] | null> {
     const result = await this.find({ relations: ['classId', 'userId'] })
     return result;
   },

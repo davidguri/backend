@@ -5,7 +5,7 @@ import { UniversityMapper } from "../database/mappings/university.mapper";
 import University from "../models/university.model";
 
 export class UniversityController {
-  static async getUniversities(): Promise<University[]> {
+  static async getUniversities(): Promise<University[] | null> {
     return await UniversityRepository.findAll();
   }
 

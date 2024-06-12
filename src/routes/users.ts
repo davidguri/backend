@@ -78,7 +78,8 @@ router.put('/update/:id', async (req: Request, res: Response) => {
 
 router.put('/:userId/classes/:classId', async (req: Request, res: Response) => {
   try {
-    await UserController.addUserToClass(req, res);
+    const user = await UserController.addUserToClass(req, res);
+    res.status(200).json(user);
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
@@ -87,6 +88,7 @@ router.put('/:userId/classes/:classId', async (req: Request, res: Response) => {
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
     await UserController.deleteUser(req, res);
+    res.status(200).json({ message: 'User deleted successfully' });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

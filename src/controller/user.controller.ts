@@ -102,68 +102,38 @@ export class UserController {
   static async deleteUser(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
 
-    try {
-      const user = await UserRepository.findById(id);
+    const user = await UserRepository.findById(id);
 
-      if (!user) {
-        res.status(404).json({ message: 'User not found' });
-        return;
-      }
-
-      await UserRepository.removeObject(user);
-      res.status(200).json({ message: 'User deleted successfully' });
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
     }
+
+    await UserRepository.removeObject(user);
   }
 
-  static async addUserToClass(req: Request, res: Response): Promise<void> {
+  static async addUserToClass(req: Request, res: Response): Promise<User | void> {
     const { userId, classId } = req.params;
 
-    try {
-      const user = await UserRepository.findById(userId);
-      if (!user) {
-        res.status(404).json({ message: "User not found :(" })
-        return;
-      }
+    const user = await UserRepository.findById(userId);
+    const classObj = await ClassRepository.findById(classId);
 
-      const classObj = await ClassRepository.findById(classId);
-      if (!classObj) {
-        res.status(404).json({ message: "Class not found :(" })
-        return;
-      }
-
-      await dataSource
-        .createQueryBuilder()
-        .relation(UserEntity, "classes")
-        .of(user)
-        .add(classObj);
-
-      // await dataSource
-      //   .createQueryBuilder()
-      //   .insert()
-      //   .into(UserEntity)
-      //   .values({
-      //     classes: [classId]
-      //   })
-      //   .execute()
-
-      // await dataSource
-      //   .createQueryBuilder()
-      //   .update(UserEntity)
-      //   .set({
-      //     classes: [
-      //       ...
-      //       classId
-      //     ]
-      //   })
-      //   .where("id = :userId", { id: userId })
-      //   .execute()
-
-
-      res.status(200).json(UserMapper.toModel(user));
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
+    if (!user) {
+      res.status(404).json({ message: "User not found :(" })
+      return;
     }
+
+    if (!classObj) {
+      res.status(404).json({ message: "Class not found :(" })
+      return;
+    }
+
+    await dataSource
+      .createQueryBuilder()
+      .relation(UserEntity, "classes")
+      .of(user)
+      .add(classObj);
+
+    return UserMapper.toModel(user);
   }
 }

@@ -58,9 +58,9 @@ export class UserController {
         }
       }
 
-      const user = UserMapper.toEntity(userModel, userModel.classes, userModel.universityId);
+      const user = UserMapper.toEntity(userModel);
       if (university) {
-        user.university = university;
+        user.universityId = university.id;
       }
 
       const savedUser = await UserRepository.saveObject(user);
@@ -86,7 +86,7 @@ export class UserController {
       user.email = userModel.email || user.email;
       user.role = userModel.role || user.role;
       user.department = userModel.department || user.department;
-      user.university = userModel.university || user.university;
+      user.universityId = userModel.university || user.universityId;
       user.updatedAt = userModel.updatedAt || user.updatedAt;
 
       const updatedUser = await UserRepository.saveObject(user);

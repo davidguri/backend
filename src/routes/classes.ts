@@ -37,7 +37,7 @@ router.get('/user/:id', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/', async (res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   try {
     const classes = await ClassController.getClasses();
     res.status(200).json(classes)

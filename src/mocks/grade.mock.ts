@@ -4,7 +4,9 @@ export const gradeMock: Grade[] = [
   {
     id: "0",
     grade: 10,
-    gradePercentage: 100,
+    percentage: 100,
+    classId: "",
+    userId: "",
     createdAt: new Date(),
     updatedAt: new Date(),
   }

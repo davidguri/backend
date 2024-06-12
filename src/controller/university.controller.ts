@@ -22,12 +22,14 @@ export class UniversityController {
   }
 
   static async createUniversity(req: Request): Promise<University> {
-    const { id, name, location, createdAt, updatedAt } = req.body;
+    const { id, name, location, createdAt, updatedAt, users, classes } = req.body;
 
     const university = new UniversityEntity;
     university.id = id;
     university.name = name;
     university.location = location;
+    university.users = users;
+    university.classes = classes;
     university.createdAt = createdAt;
     university.updatedAt = updatedAt;
 
@@ -36,7 +38,7 @@ export class UniversityController {
 
   static async updateUniversity(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
-    const { name, location, createdAt, updatedAt } = req.body;
+    const { name, location, users, classes, createdAt, updatedAt } = req.body;
 
     try {
       const university = await UniversityRepository.findById(id);
@@ -49,6 +51,8 @@ export class UniversityController {
       university.id = id;
       university.name = name;
       university.location = location;
+      university.users = users;
+      university.classes = classes;
       university.createdAt = createdAt;
       university.updatedAt = updatedAt;
 

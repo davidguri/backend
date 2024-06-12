@@ -6,7 +6,7 @@ import { ClassMapper } from "../mappings/class.mapper";
 export const ClassRepository = dataSource.getRepository(ClassEntity).extend({
   async findAll(): Promise<Class[]> {
     return (
-      await this.find({ relations: ['university'] })
+      await this.find({ relations: ['universityId'] })
     )?.map(ClassMapper.toModel);
   },
 
@@ -16,13 +16,13 @@ export const ClassRepository = dataSource.getRepository(ClassEntity).extend({
 
   async findByUser(userId: string): Promise<Class[] | null> {
     return (
-      await this.find({ where: { users: { id: userId } }, relations: ['university', 'users'] })
+      await this.find({ where: { users: userId }, relations: ['university', 'users'] })
     ).map(ClassMapper.toModel);
   },
 
   async findByUniversity(universityId: string): Promise<Class[] | null> {
     return (
-      await this.find({ where: { university: { id: universityId } }, relations: ['university', 'users'] })
+      await this.find({ where: { universityId: universityId }, relations: ['university', 'users'] })
     ).map(ClassMapper.toModel);
   },
 

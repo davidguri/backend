@@ -1,4 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, ManyToOne, ManyToMany } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  UpdateDateColumn,
+  CreateDateColumn,
+  ManyToOne,
+  ManyToMany,
+  JoinColumn,
+  JoinTable
+} from "typeorm";
 import Department from "../../models/department.model";
 
 import { UniversityEntity } from "./university.entity";
@@ -16,10 +26,12 @@ export class ClassEntity {
   department!: Department
 
   @ManyToOne(() => UniversityEntity, (university) => university.classes)
-  university!: UniversityEntity
+  @JoinColumn({ name: "universityId" })
+  universityId!: string
 
   @ManyToMany(() => UserEntity, (users) => users.classes)
-  users!: UserEntity[]
+  @JoinTable()
+  users!: string[]
 
   @CreateDateColumn()
   createdAt!: Date

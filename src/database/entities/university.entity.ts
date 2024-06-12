@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, OneToMany, JoinColumn } from "typeorm";
 
 import { UserEntity } from "./user.entity";
 import { ClassEntity } from "./class.entity";
@@ -14,11 +14,13 @@ export class UniversityEntity {
   @Column()
   location!: string
 
-  @OneToMany(() => UserEntity, (user) => user.university)
-  users?: UserEntity[];
+  @OneToMany(() => UserEntity, (user) => user.universityId)
+  @JoinColumn({ name: "users" })
+  users!: string[];
 
-  @OneToMany(() => ClassEntity, (classEntity) => classEntity.university)
-  classes?: ClassEntity[];
+  @OneToMany(() => ClassEntity, (classEntity) => classEntity.universityId)
+  @JoinColumn({ name: "classes" })
+  classes!: string[];
 
   @CreateDateColumn()
   createdAt!: Date

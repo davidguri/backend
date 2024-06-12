@@ -1,5 +1,15 @@
 import Department from "../../models/department.model";
-import { Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, ManyToOne, ManyToMany, JoinTable } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  UpdateDateColumn,
+  CreateDateColumn,
+  ManyToOne,
+  ManyToMany,
+  JoinColumn,
+  JoinTable
+} from "typeorm";
 import { Role } from "../../models/user.model";
 
 import { UniversityEntity } from "./university.entity";
@@ -12,17 +22,17 @@ export class UserEntity {
 
   @Column()
   name!: string
-  // in a database, strings are stored as varchar with specific length
 
   @Column()
   email!: string
 
   @ManyToOne(() => UniversityEntity, (university) => university.users)
-  university?: UniversityEntity | null
+  @JoinColumn({ name: "universityId" })
+  universityId!: string
 
-  @ManyToMany(() => ClassEntity, (classObject) => classObject.users, { nullable: true })
+  @ManyToMany(() => ClassEntity, (classObject) => classObject.users)
   @JoinTable()
-  classes?: ClassEntity[] | null
+  classes!: string[]
 
   @Column()
   role!: Role

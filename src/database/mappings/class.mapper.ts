@@ -1,10 +1,8 @@
 import Class from "../../models/class.model";
 import { ClassEntity } from "../entities/class.entity";
-import { UniversityEntity } from "../entities/university.entity";
-import { UserEntity } from "../entities/user.entity";
 
 export class ClassMapper {
-  static toEntity(model: Class, university: UniversityEntity, users: UserEntity[] = []): ClassEntity {
+  static toEntity(model: Class): ClassEntity {
     const classObj = new ClassEntity;
 
     classObj.id = model.id;
@@ -12,9 +10,8 @@ export class ClassMapper {
     classObj.department = model.department;
     classObj.createdAt = model.createdAt;
     classObj.updatedAt = model.updatedAt;
-    classObj.university = university;
-    classObj.users = users;
-
+    classObj.universityId = model.universityId;
+    classObj.users = model.users;
 
     return classObj;
   }
@@ -26,8 +23,8 @@ export class ClassMapper {
       department: entity.department,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
-      university: entity.university.id,
-      users: entity.users.map(user => user.id)
+      universityId: entity.universityId,
+      users: entity.users
     }
   }
 }

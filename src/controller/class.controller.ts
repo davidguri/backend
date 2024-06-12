@@ -40,7 +40,7 @@ export class ClassController {
     const classModel = req.body;
 
     try {
-      const classObj = ClassMapper.toEntity(classModel, classModel.users, classModel.university)
+      const classObj = ClassMapper.toEntity(classModel)
 
       const savedClass = await ClassRepository.saveObject(classObj);
       res.status(201).json(savedClass);

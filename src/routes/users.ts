@@ -76,6 +76,14 @@ router.put('/update/:id', async (req: Request, res: Response) => {
   }
 });
 
+router.put('/:userId/classes/:classId', async (req: Request, res: Response) => {
+  try {
+    await UserController.addUserToClass(req, res);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message })
+  }
+})
+
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
     await UserController.deleteUser(req, res);

@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
 import { UserRepository } from '../database/repositories/user.repository';
 import { UniversityRepository } from '../database/repositories/university.repository';
+import { ClassRepository } from '../database/repositories/class.repository';
 import { UserEntity } from '../database/entities/user.entity';
 import { UserMapper } from '../database/mappings/user.mapper';
 import { Role } from '../models/user.model';
 import Department from '../models/department.model';
 import User from '../models/user.model';
+import { dataSource } from '../typeorm.config';
+
 
 export class UserController {
   static async getUsers(): Promise<User[] | null> {
@@ -109,6 +112,56 @@ export class UserController {
 
       await UserRepository.removeObject(user);
       res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  static async addUserToClass(req: Request, res: Response): Promise<void> {
+    const { userId, classId } = req.params;
+
+    try {
+      const user = await UserRepository.findById(userId);
+      if (!user) {
+        res.status(404).json({ message: "User not found :(" })
+        return;
+      }
+
+      const classObj = await ClassRepository.findById(classId);
+      if (!classObj) {
+        res.status(404).json({ message: "Class not found :(" })
+        return;
+      }
+
+      await dataSource
+        .createQueryBuilder()
+        .relation(UserEntity, "classes")
+        .of(user)
+        .add(classObj);
+
+      // await dataSource
+      //   .createQueryBuilder()
+      //   .insert()
+      //   .into(UserEntity)
+      //   .values({
+      //     classes: [classId]
+      //   })
+      //   .execute()
+
+      // await dataSource
+      //   .createQueryBuilder()
+      //   .update(UserEntity)
+      //   .set({
+      //     classes: [
+      //       ...
+      //       classId
+      //     ]
+      //   })
+      //   .where("id = :userId", { id: userId })
+      //   .execute()
+
+
+      res.status(200).json(UserMapper.toModel(user));
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

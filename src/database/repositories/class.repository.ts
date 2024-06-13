@@ -28,7 +28,7 @@ export const ClassRepository = dataSource.getRepository(ClassEntity).extend({
   },
 
   async saveObject(obj: Class): Promise<Class> {
-    return ClassMapper.toModel(await this.save(obj));
+    return await this.save(ClassMapper.toEntity(obj))
   },
 
   async removeObject(obj: ClassEntity): Promise<ClassEntity> {

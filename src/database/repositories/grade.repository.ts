@@ -35,7 +35,7 @@ export const GradeRepository = dataSource.getRepository(GradeEntity).extend({
   },
 
   async saveObject(obj: Grade): Promise<Grade> {
-    return await this.save(obj)
+    return await this.save(GradeMapper.toEntity(obj))
   },
 
   async removeObject(obj: GradeEntity): Promise<GradeEntity> {

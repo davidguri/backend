@@ -22,18 +22,9 @@ export class UniversityController {
   }
 
   static async createUniversity(req: Request): Promise<University> {
-    const { id, name, location, createdAt, updatedAt, users, classes } = req.body;
+    const universityModel = req.body;
 
-    const university = new UniversityEntity;
-    university.id = id;
-    university.name = name;
-    university.location = location;
-    university.users = users;
-    university.classes = classes;
-    university.createdAt = createdAt;
-    university.updatedAt = updatedAt;
-
-    return await UniversityRepository.saveObject(university);
+    return await UniversityRepository.saveObject(universityModel);
   }
 
   static async updateUniversity(req: Request, res: Response): Promise<void> {

@@ -10,7 +10,7 @@ export const ClassRepository = dataSource.getRepository(ClassEntity).extend({
     )?.map(ClassMapper.toModel);
   },
 
-  async findById(id: string): Promise<ClassEntity | null> {
+  async findById(id: string): Promise<Class | null> {
     const classObj = await this.findOne({ where: { id }, relations: ['universityId', 'users'] });
     return (classObj ? ClassMapper.toModel(classObj) : null);
   },

@@ -11,7 +11,8 @@ export const ClassRepository = dataSource.getRepository(ClassEntity).extend({
   },
 
   async findById(id: string): Promise<ClassEntity | null> {
-    return await this.findOne({ where: { id }, relations: ['universityId', 'users'] });
+    const classObj = await this.findOne({ where: { id }, relations: ['universityId', 'users'] });
+    return (classObj ? ClassMapper.toModel(classObj) : null);
   },
 
   async findByUser(userId: string): Promise<Class[] | null> {
@@ -26,7 +27,7 @@ export const ClassRepository = dataSource.getRepository(ClassEntity).extend({
     ).map(ClassMapper.toModel);
   },
 
-  async saveObject(obj: ClassEntity): Promise<Class> {
+  async saveObject(obj: Class): Promise<Class> {
     return ClassMapper.toModel(await this.save(obj));
   },
 

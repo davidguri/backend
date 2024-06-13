@@ -5,7 +5,12 @@ export const router = express.Router();
 
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    await ClassController.getClassesById(req, res);
+    const classObj = await ClassController.getClassesById(req, res);
+    if (classObj) {
+      res.status(200).json(classObj);
+    } else {
+      res.status(404).json({ message: "Class not found :(" })
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -48,7 +53,8 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
   try {
-    await ClassController.createClass(req, res);
+    const savedClass = await ClassController.createClass(req, res);
+    res.status(201).json(savedClass);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -65,6 +71,7 @@ router.put('/:id', async (req: Request, res: Response) => {
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
     await ClassController.deleteClass(req, res);
+    res.status(200).json({ message: "User deleted successfully" });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

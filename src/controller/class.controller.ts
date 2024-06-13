@@ -9,19 +9,10 @@ export class ClassController {
     return await ClassRepository.findAll()
   }
 
-  static async getClassesById(req: Request, res: Response): Promise<void> {
+  static async getClassesById(req: Request, res: Response): Promise<Class | null> {
     const { id } = req.params;
 
-    try {
-      const classObj = await ClassRepository.findById(id);
-      if (classObj) {
-        res.status(200).json(ClassMapper.toModel(classObj))
-      } else {
-        res.status(404).json({ message: "Class not found :(" })
-      }
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
-    }
+    return await ClassRepository.findById(id);
   }
 
   static async getClassesByUniversity(req: Request, res: Response): Promise<Class[] | null> {
@@ -36,17 +27,10 @@ export class ClassController {
     return ClassRepository.findByUser(userId);
   }
 
-  static async createClass(req: Request, res: Response): Promise<void> {
+  static async createClass(req: Request, res: Response): Promise<Class> {
     const classModel = req.body;
 
-    try {
-      const classObj = ClassMapper.toEntity(classModel)
-
-      const savedClass = await ClassRepository.saveObject(classObj);
-      res.status(201).json(savedClass);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+    return await ClassRepository.saveObject(classModel);
   }
 
   static async updateClass(req: Request, res: Response): Promise<void> {
@@ -84,7 +68,6 @@ export class ClassController {
       }
 
       await ClassRepository.removeObject(classObj);
-      res.status(200).json({ message: "User deleted successfully" });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

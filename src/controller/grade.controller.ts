@@ -8,62 +8,28 @@ export class GradeController {
     return await GradeRepository.findAll();
   }
 
-  static async getGradesById(req: Request, res: Response): Promise<void> {
+  static async getGradesById(req: Request, res: Response): Promise<Grade | null> {
     const { id } = req.params;
 
-    try {
-      const grade = await GradeRepository.findById(id);
-      if (grade) {
-        res.status(200).json(GradeMapper.toModel(grade))
-      } else {
-        res.status(404).json({ message: "Grade not found :(" })
-      }
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
-    }
+    return await GradeRepository.findById(id);
   }
 
-  static async getGradesByUser(req: Request, res: Response): Promise<void> {
+  static async getGradesByUser(req: Request, res: Response): Promise<Grade[] | null> {
     const { userId } = req.params;
 
-    try {
-      const grades = await GradeRepository.findByUser(userId)
-      if (grades) {
-        res.status(200).json(grades)
-      } else {
-        res.status(404).json({ message: "Grades not found :(" })
-      }
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
-    }
+    return await GradeRepository.findByUser(userId)
   }
 
-  static async getGradesByClass(req: Request, res: Response): Promise<void> {
+  static async getGradesByClass(req: Request, res: Response): Promise<Grade[] | null> {
     const { classId } = req.params;
 
-    try {
-      const grades = await GradeRepository.findByClass(classId)
-      if (grades) {
-        res.status(200).json(grades)
-      } else {
-        res.status(404).json({ message: "Grades not found :(" })
-      }
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
-    }
+    return await GradeRepository.findByClass(classId)
   }
 
-  static async createGrade(req: Request, res: Response): Promise<void> {
-    const grade = req.body;
+  static async createGrade(req: Request, res: Response): Promise<Grade> {
+    const gradeModel = req.body;
 
-    console.log(grade);
-
-    try {
-      const savedGrade = await GradeRepository.saveObject(grade);
-      res.status(201).json(savedGrade);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
+    return await GradeRepository.saveObject(gradeModel);
   }
 
   static async updateGrade(req: Request, res: Response): Promise<void> {

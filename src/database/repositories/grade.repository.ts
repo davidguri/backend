@@ -9,8 +9,9 @@ export const GradeRepository = dataSource.getRepository(GradeEntity).extend({
     return result;
   },
 
-  async findById(id: string): Promise<GradeEntity | null> {
-    return await this.findOneBy({ id });
+  async findById(id: string): Promise<Grade | null> {
+    const grade = await this.findOne({ where: { id }, relations: ['userId', 'classId'] });
+    return (grade ? GradeMapper.toModel(grade) : null);
   },
 
   async findByUser(userId: string): Promise<Grade[] | null> {
@@ -34,11 +35,7 @@ export const GradeRepository = dataSource.getRepository(GradeEntity).extend({
   },
 
   async saveObject(obj: Grade): Promise<Grade> {
-    const grade = GradeMapper.toEntity(obj)
-
-    return (
-      GradeMapper.toModel(await this.save(grade))
-    );
+    return await this.save(obj)
   },
 
   async removeObject(obj: GradeEntity): Promise<GradeEntity> {

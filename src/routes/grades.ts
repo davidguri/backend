@@ -5,7 +5,12 @@ export const router = express.Router();
 
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    await GradeController.getGradesById(req, res);
+    const grade = await GradeController.getGradesById(req, res);
+    if (grade) {
+      res.status(200).json(grade)
+    } else {
+      res.status(404).json({ message: "Grade not found :(" })
+    }
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -13,7 +18,12 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 router.get('/user/:id', async (req: Request, res: Response) => {
   try {
-    await GradeController.getGradesByUser(req, res);
+    const grades = await GradeController.getGradesByUser(req, res);
+    if (grades) {
+      res.status(200).json(grades)
+    } else {
+      res.status(404).json({ message: "Grades not found :(" })
+    }
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -21,7 +31,12 @@ router.get('/user/:id', async (req: Request, res: Response) => {
 
 router.get('/class/:id', async (req: Request, res: Response) => {
   try {
-    await GradeController.getGradesByClass(req, res);
+    const grades = await GradeController.getGradesByClass(req, res);
+    if (grades) {
+      res.status(200).json(grades)
+    } else {
+      res.status(404).json({ message: "Grades not found :(" })
+    }
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -38,7 +53,8 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
   try {
-    await GradeController.createGrade(req, res);
+    const savedGrade = await GradeController.createGrade(req, res);
+    res.status(201).json(savedGrade);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

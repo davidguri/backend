@@ -1,12 +1,16 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response } from 'express';
 import { UserController } from '../controller/user.controller';
-import { CustomError } from '../utils/CustomError';
 
 const router = express.Router();
 
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    await UserController.getUsersById(req, res);
+    const user = await UserController.getUsersById(req);
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ message: "User not found :(" });
+    }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -27,7 +31,7 @@ router.get('/university/:university', async (req: Request, res: Response) => {
 
 router.get('/role/:role', async (req: Request, res: Response) => {
   try {
-    const users = await UserController.getUsersByRole(req, res);
+    const users = await UserController.getUsersByRole(req);
     if (users) {
       res.status(200).json(users);
     } else {
@@ -40,7 +44,7 @@ router.get('/role/:role', async (req: Request, res: Response) => {
 
 router.get('/department/:department', async (req: Request, res: Response) => {
   try {
-    const users = await UserController.getUsersByDepartment(req, res);
+    const users = await UserController.getUsersByDepartment(req);
     if (users) {
       res.status(200).json(users);
     } else {
@@ -62,7 +66,8 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
   try {
-    await UserController.createUser(req, res);
+    const savedUser = await UserController.createUser(req, res);
+    res.status(201).json(savedUser);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

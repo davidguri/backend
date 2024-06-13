@@ -10,8 +10,9 @@ export const UserRepository = dataSource.getRepository(UserEntity).extend({
     return (await this.find({ relations: ['universityId', 'classes'] }))?.map(UserMapper.toModel);
   },
 
-  async findById(id: string): Promise<UserEntity | null> {
-    return await this.findOne({ where: { id }, relations: ['universityId', 'classes'] });
+  async findById(id: string): Promise<User | null> {
+    const user = await this.findOne({ where: { id }, relations: ['universityId', 'classes'] });
+    return (user ? UserMapper.toModel(user) : null);
   },
 
   async findByUniversity(universityId: string): Promise<User[] | null> {
@@ -40,14 +41,12 @@ export const UserRepository = dataSource.getRepository(UserEntity).extend({
     ).map(UserMapper.toModel);
   },
 
-  async saveObject(obj: UserEntity): Promise<User> {
-    return (
-      UserMapper.toModel(await this.save(obj))
-    );
+  async saveObject(obj: User): Promise<User> {
+    return await this.save(UserMapper.toEntity(obj))
   },
 
-  async removeObject(obj: UserEntity): Promise<UserEntity> {
-    return await this.remove(obj);
+  async removeObject(obj: User): Promise<User> {
+    return await this.remove(UserMapper.toEntity(obj));
   },
 })
 

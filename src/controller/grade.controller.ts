@@ -8,55 +8,42 @@ export class GradeController {
     return await GradeRepository.findAll();
   }
 
-  static async getGradesById(req: Request, res: Response): Promise<Grade | null> {
-    const { id } = req.params;
-
+  static async getGradesById(id: string): Promise<Grade | null> {
     return await GradeRepository.findById(id);
   }
 
-  static async getGradesByUser(req: Request, res: Response): Promise<Grade[] | null> {
-    const { userId } = req.params;
-
+  static async getGradesByUser(userId: string): Promise<Grade[] | null> {
     return await GradeRepository.findByUser(userId)
   }
 
-  static async getGradesByClass(req: Request, res: Response): Promise<Grade[] | null> {
-    const { classId } = req.params;
-
+  static async getGradesByClass(classId: string): Promise<Grade[] | null> {
     return await GradeRepository.findByClass(classId)
   }
 
-  static async createGrade(req: Request, res: Response): Promise<Grade> {
-    const gradeModel = req.body;
-
+  static async createGrade(gradeModel: Grade): Promise<Grade> {
     return await GradeRepository.saveObject(gradeModel);
   }
 
-  static async updateGrade(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
-    const gradeModel = req.body;
-
-    const grade = await GradeRepository.findById(id);
+  static async updateGrade(id: string, gradeModel: Grade): Promise<void> {
+    let grade = await GradeRepository.findById(id);
 
     if (!grade) {
-      res.status(404).json({ message: "Grade not found :(" });
-      return;
+      throw new Error
     }
 
-    grade.grade = gradeModel.grade || grade.grade
-    grade.percentage = gradeModel.percentage || grade.percentage;
-    grade.createdAt = gradeModel.createdAt || grade.createdAt;
-    grade.updatedAt = gradeModel.updatedAt || grade.updatedAt;
+    const { id: gradeId, createdAt, ...formatedGradeModel } = gradeModel;
+
+    grade = {
+      ...grade,
+      ...formatedGradeModel,
+    };
   }
 
-  static async deleteGrade(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
-
+  static async deleteGrade(id: string): Promise<void> {
     const grade = await GradeRepository.findById(id);
 
     if (!grade) {
-      res.status(404).json({ message: "Grade not found :(" });
-      return;
+      throw new Error
     }
 
     await GradeRepository.removeObject(grade);

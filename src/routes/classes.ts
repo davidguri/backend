@@ -5,7 +5,7 @@ export const router = express.Router();
 
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    const classObj = await ClassController.getClassesById(req, res);
+    const classObj = await ClassController.getClassesById(req.params.id);
     if (classObj) {
       res.status(200).json(classObj);
     } else {
@@ -18,7 +18,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 router.get('/university/:id', async (req: Request, res: Response) => {
   try {
-    const classes = await ClassController.getClassesByUniversity(req, res);
+    const classes = await ClassController.getClassesByUniversity(req.params.id);
     if (classes) {
       res.status(200).json(classes);
     } else {
@@ -31,7 +31,7 @@ router.get('/university/:id', async (req: Request, res: Response) => {
 
 router.get('/user/:id', async (req: Request, res: Response) => {
   try {
-    const classes = await ClassController.getClassesByUser(req, res);
+    const classes = await ClassController.getClassesByUser(req.params.id);
     if (classes) {
       res.status(200).json(classes);
     } else {
@@ -53,7 +53,7 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const savedClass = await ClassController.createClass(req, res);
+    const savedClass = await ClassController.createClass(req.body);
     res.status(201).json(savedClass);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -62,7 +62,8 @@ router.post('/', async (req: Request, res: Response) => {
 
 router.put('/:id', async (req: Request, res: Response) => {
   try {
-    await ClassController.updateClass(req, res);
+    const updatedClass = await ClassController.updateClass(req.params.id, req.body);
+    res.status(200).json(updatedClass)
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -70,7 +71,7 @@ router.put('/:id', async (req: Request, res: Response) => {
 
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
-    await ClassController.deleteClass(req, res);
+    await ClassController.deleteClass(req.params.id);
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error: any) {
     res.status(500).json({ message: error.message });

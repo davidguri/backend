@@ -9,67 +9,50 @@ export class ClassController {
     return await ClassRepository.findAll()
   }
 
-  static async getClassesById(req: Request, res: Response): Promise<Class | null> {
-    const { id } = req.params;
-
+  static async getClassesById(id: string): Promise<Class | null> {
     return await ClassRepository.findById(id);
   }
 
-  static async getClassesByUniversity(req: Request, res: Response): Promise<Class[] | null> {
-    const { universityId } = req.params;
-
+  static async getClassesByUniversity(universityId: string): Promise<Class[] | null> {
     return ClassRepository.findByUniversity(universityId);
   }
 
-  static async getClassesByUser(req: Request, res: Response): Promise<Class[] | null> {
-    const { userId } = req.params;
-
+  static async getClassesByUser(userId: string): Promise<Class[] | null> {
     return ClassRepository.findByUser(userId);
   }
 
-  static async createClass(req: Request, res: Response): Promise<Class> {
-    const classModel = req.body;
-
+  static async createClass(classModel: Class): Promise<Class> {
     return await ClassRepository.saveObject(classModel);
   }
 
-  static async updateClass(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
-    const classModel = req.body;
+  static async updateClass(id: string, classModel: Class): Promise<Class> {
+    let classObj = await ClassRepository.findById(id);
 
-    try {
-      const classObj = await ClassRepository.findById(id);
-
-      if (!classObj) {
-        res.status(404).json({ message: "Class not found :(" });
-        return;
-      }
-
-      classObj.name = classModel.name || classObj.name;
-      classObj.department = classModel.department || classObj.department;
-      classObj.updatedAt = classModel.updatedAt || classObj.updatedAt;
-
-      const updatedClass = await ClassRepository.saveObject(classObj);
-      res.status(200).json(updatedClass)
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
+    if (!classObj) {
+      throw new Error
     }
+
+    const { id: classId, createdAt, ...formatedClassModel } = classObj;
+
+    classObj = {
+      ...classObj,
+      ...formatedClassModel,
+    };
+
+    classObj.name = classModel.name || classObj.name;
+    classObj.department = classModel.department || classObj.department;
+    classObj.updatedAt = classModel.updatedAt || classObj.updatedAt;
+
+    return await ClassRepository.saveObject(classObj);
   }
 
-  static async deleteClass(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
+  static async deleteClass(id: string): Promise<void> {
+    const classObj = await ClassRepository.findById(id);
 
-    try {
-      const classObj = await ClassRepository.findById(id);
-
-      if (!classObj) {
-        res.status(404).json({ message: "Class not found L(" })
-        return;
-      }
-
-      await ClassRepository.removeObject(classObj);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
+    if (!classObj) {
+      throw new Error
     }
+
+    await ClassRepository.removeObject(classObj);
   }
 }

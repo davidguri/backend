@@ -63,6 +63,7 @@ router.post('/', async (req: Request, res: Response) => {
 router.put('/', async (req: Request, res: Response) => {
   try {
     await GradeController.updateGrade(req, res);
+    res.status(200).json({ message: "Grade updated successfully" });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -71,6 +72,7 @@ router.put('/', async (req: Request, res: Response) => {
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
     await GradeController.deleteGrade(req, res);
+    res.status(200).json({ message: "Grade deleted successfully" });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

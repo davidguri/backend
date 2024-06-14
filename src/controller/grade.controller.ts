@@ -36,38 +36,29 @@ export class GradeController {
     const { id } = req.params;
     const gradeModel = req.body;
 
-    try {
-      const grade = await GradeRepository.findById(id);
+    const grade = await GradeRepository.findById(id);
 
-      if (!grade) {
-        res.status(404).json({ message: "Grade not found :(" });
-        return;
-      }
-
-      grade.grade = gradeModel.grade || grade.grade
-      grade.percentage = gradeModel.percentage || grade.percentage;
-      grade.createdAt = gradeModel.createdAt || grade.createdAt;
-      grade.updatedAt = gradeModel.updatedAt || grade.updatedAt;
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
+    if (!grade) {
+      res.status(404).json({ message: "Grade not found :(" });
+      return;
     }
+
+    grade.grade = gradeModel.grade || grade.grade
+    grade.percentage = gradeModel.percentage || grade.percentage;
+    grade.createdAt = gradeModel.createdAt || grade.createdAt;
+    grade.updatedAt = gradeModel.updatedAt || grade.updatedAt;
   }
 
   static async deleteGrade(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
 
-    try {
-      const grade = await GradeRepository.findById(id);
+    const grade = await GradeRepository.findById(id);
 
-      if (!grade) {
-        res.status(404).json({ message: "Grade not found :(" });
-        return;
-      }
-
-      await GradeRepository.removeObject(grade);
-      res.status(200).json({ message: "Grade deleted successfully" });
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
+    if (!grade) {
+      res.status(404).json({ message: "Grade not found :(" });
+      return;
     }
+
+    await GradeRepository.removeObject(grade);
   }
 }

@@ -1,7 +1,4 @@
-import { Request, Response } from "express";
 import { ClassRepository } from "../database/repositories/class.repository";
-import { ClassEntity } from "../database/entities/class.entity";
-import { ClassMapper } from "../database/mappings/class.mapper";
 import Class from "../models/class.model";
 
 export class ClassController {
@@ -32,7 +29,7 @@ export class ClassController {
       throw new Error
     }
 
-    const { id: classId, createdAt, ...formatedClassModel } = classObj;
+    const { id: classId, createdAt, ...formatedClassModel } = classModel;
 
     classObj = {
       ...classObj,

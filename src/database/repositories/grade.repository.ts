@@ -5,12 +5,21 @@ import Grade from "../../models/grade.model";
 
 export const GradeRepository = dataSource.getRepository(GradeEntity).extend({
   async findAll(): Promise<Grade[] | null> {
-    const result = await this.find({ relations: ['classId', 'userId'] })
+    const result = await this.find({
+      relations: [
+        'classId',
+        'userId']
+    })
     return result;
   },
 
   async findById(id: string): Promise<Grade | null> {
-    const grade = await this.findOne({ where: { id }, relations: ['userId', 'classId'] });
+    const grade = await this.findOne({
+      where: { id },
+      relations: [
+        'userId',
+        'classId']
+    });
     return (grade ? GradeMapper.toModel(grade) : null);
   },
 

@@ -61,7 +61,8 @@ router.put('/:id', async (req: Request, res: Response) => {
 
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
-    await UniversityController.deleteUniversity(req, res);
+    await UniversityController.deleteUniversity(req.params.id);
+    res.status(204).send();
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { UniversityRepository } from "../database/repositories/university.repository";
-import { UniversityEntity } from "../database/entities/university.entity";
-import { UniversityMapper } from "../database/mappings/university.mapper";
 import University from "../models/university.model";
 
 export class UniversityController {
@@ -38,21 +36,13 @@ export class UniversityController {
     return await UniversityRepository.saveObject(university);
   }
 
-  static async deleteUniversity(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
+  static async deleteUniversity(id: string): Promise<void> {
+    const university = await UniversityRepository.findById(id);
 
-    try {
-      const university = await UniversityRepository.findById(id);
-
-      if (!university) {
-        res.status(404).json({ message: "University not found :(" });
-        return;
-      }
-
-      await UniversityRepository.removeObject(university);
-      res.status(204).send();
-    } catch (error: any) {
-      res.status(500).json({ message: error.message })
+    if (!university) {
+      throw new Error
     }
+
+    await UniversityRepository.removeObject(university);
   }
 }

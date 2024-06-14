@@ -7,11 +7,20 @@ import { UserMapper } from "../mappings/user.mapper";
 
 export const UserRepository = dataSource.getRepository(UserEntity).extend({
   async findAll(): Promise<User[] | null> {
-    return (await this.find({ relations: ['universityId', 'classes'] }))?.map(UserMapper.toModel);
+    return (await this.find({
+      relations: [
+        'universityId',
+        'classes']
+    }))?.map(UserMapper.toModel);
   },
 
   async findById(id: string): Promise<User | null> {
-    const user = await this.findOne({ where: { id }, relations: ['universityId', 'classes'] });
+    const user = await this.findOne({
+      where: { id },
+      relations: [
+        'universityId',
+        'classes']
+    });
     return (user ? UserMapper.toModel(user) : null);
   },
 
@@ -28,7 +37,9 @@ export const UserRepository = dataSource.getRepository(UserEntity).extend({
   async findByRole(role: Role): Promise<User[] | null> {
     return (
       await this.find({
-        where: { role: role }
+        where: {
+          role: role
+        }
       })
     ).map(UserMapper.toModel);
   },

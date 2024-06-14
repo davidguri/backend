@@ -11,19 +11,39 @@ export const ClassRepository = dataSource.getRepository(ClassEntity).extend({
   },
 
   async findById(id: string): Promise<Class | null> {
-    const classObj = await this.findOne({ where: { id }, relations: ['universityId', 'users'] });
+    const classObj = await this.findOne({
+      where: { id },
+      relations: [
+        'universityId',
+        'users'
+      ]
+    });
     return (classObj ? ClassMapper.toModel(classObj) : null);
   },
 
   async findByUser(userId: string): Promise<Class[] | null> {
     return (
-      await this.find({ where: { users: userId }, relations: ['universityId', 'users'] })
+      await this.find({
+        where: {
+          users: userId
+        },
+        relations: [
+          'universityId',
+          'users']
+      })
     ).map(ClassMapper.toModel);
   },
 
   async findByUniversity(universityId: string): Promise<Class[] | null> {
     return (
-      await this.find({ where: { universityId: universityId }, relations: ['universityId', 'users'] })
+      await this.find({
+        where: {
+          universityId: universityId
+        },
+        relations: [
+          'universityId',
+          'users']
+      })
     ).map(ClassMapper.toModel);
   },
 

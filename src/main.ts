@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import 'reflect-metadata';
 import { dataSource } from './typeorm.config';
 import routes from './routes';
-import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
 
@@ -17,8 +16,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/', routes);
-
-app.use(errorHandler);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');

@@ -1,12 +1,8 @@
-import { Request, Response } from 'express';
 import { UserRepository } from '../database/repositories/user.repository';
-import { UniversityRepository } from '../database/repositories/university.repository';
 import { ClassRepository } from '../database/repositories/class.repository';
 import { UserEntity } from '../database/entities/user.entity';
-import { UserMapper } from '../database/mappings/user.mapper';
-import { Role } from '../models/user.model';
+import User, { Role } from '../models/user.model';
 import Department from '../models/department.model';
-import User from '../models/user.model';
 import { dataSource } from '../typeorm.config';
 
 

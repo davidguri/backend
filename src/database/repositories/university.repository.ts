@@ -5,11 +5,20 @@ import University from "../../models/university.model";
 
 export const UniversityRepository = dataSource.getRepository(UniversityEntity).extend({
   async findAll(): Promise<UniversityEntity[] | null> {
-    return (await this.find({ relations: ['users', 'classes'] }))?.map(UniversityMapper.toModel);
+    return (await this.find({
+      relations: [
+        'users',
+        'classes']
+    }))?.map(UniversityMapper.toModel);
   },
 
   async findById(id: string): Promise<UniversityEntity | null> {
-    const university = await this.findOne({ where: { id }, relations: ['users', 'classes'] });
+    const university = await this.findOne({
+      where: { id },
+      relations: [
+        'users',
+        'classes']
+    });
     return (university ? UniversityMapper.toModel(university) : null);
   },
 

@@ -1,6 +1,4 @@
-import { Request, Response } from "express";
 import { GradeRepository } from "../database/repositories/grade.repository";
-import { GradeMapper } from "../database/mappings/grade.mapper";
 import Grade from "../models/grade.model";
 
 export class GradeController {

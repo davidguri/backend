@@ -39,10 +39,6 @@ export class ClassController {
       ...formatedClassModel,
     };
 
-    classObj.name = classModel.name || classObj.name;
-    classObj.department = classModel.department || classObj.department;
-    classObj.updatedAt = classModel.updatedAt || classObj.updatedAt;
-
     return await ClassRepository.saveObject(classObj);
   }
 

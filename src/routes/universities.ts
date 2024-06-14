@@ -5,7 +5,7 @@ export const router = express.Router();
 
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    const university = await UniversityController.getUniversitiesById(req);
+    const university = await UniversityController.getUniversitiesById(req.params.id);
 
     if (university) {
       res.json(university)
@@ -19,7 +19,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 router.get('/location/:location', async (req: Request, res: Response) => {
   try {
-    const universities = await UniversityController.getUniversitiesByLocation(req);
+    const universities = await UniversityController.getUniversitiesByLocation(req.params.location);
 
     if (universities) {
       res.status(200).json(universities);
@@ -43,7 +43,7 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const savedUniversity = await UniversityController.createUniversity(req);
+    const savedUniversity = await UniversityController.createUniversity(req.body);
     res.status(201).json({ savedUniversity })
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -52,7 +52,8 @@ router.post('/', async (req: Request, res: Response) => {
 
 router.put('/:id', async (req: Request, res: Response) => {
   try {
-    await UniversityController.updateUniversity(req, res);
+    const updatedUniversity = await UniversityController.updateUniversity(req.params.id, req.body);
+    res.status(200).json({ message: "University updated successfully" })
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

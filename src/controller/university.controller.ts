@@ -9,49 +9,33 @@ export class UniversityController {
     return await UniversityRepository.findAll();
   }
 
-  static async getUniversitiesById(req: Request): Promise<University | null> {
-    const { id } = req.params;
-
+  static async getUniversitiesById(id: string): Promise<University | null> {
     return await UniversityRepository.findById(id);
   }
 
-  static async getUniversitiesByLocation(req: Request): Promise<University[] | null> {
-    const { location } = req.params;
-
+  static async getUniversitiesByLocation(location: string): Promise<University[] | null> {
     return await UniversityRepository.findByLocation(location);
   }
 
-  static async createUniversity(req: Request): Promise<University> {
-    const universityModel = req.body;
-
+  static async createUniversity(universityModel: University): Promise<University> {
     return await UniversityRepository.saveObject(universityModel);
   }
 
-  static async updateUniversity(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
-    const { name, location, users, classes, createdAt, updatedAt } = req.body;
+  static async updateUniversity(id: string, universityModel: University): Promise<University> {
+    let university = await UniversityRepository.findById(id);
 
-    try {
-      const university = await UniversityRepository.findById(id);
-
-      if (!university) {
-        res.status(404).json({ message: 'University not found :(' });
-        return;
-      }
-
-      university.id = id;
-      university.name = name;
-      university.location = location;
-      university.users = users;
-      university.classes = classes;
-      university.createdAt = createdAt;
-      university.updatedAt = updatedAt;
-
-      const updatedUniversity = await UniversityRepository.saveObject(university);
-      res.json(updatedUniversity);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
+    if (!university) {
+      throw new Error
     }
+
+    const { id: universityId, createdAt, ...formatedUniversityModel } = universityModel;
+
+    university = {
+      ...university,
+      ...formatedUniversityModel,
+    }
+
+    return await UniversityRepository.saveObject(university);
   }
 
   static async deleteUniversity(req: Request, res: Response): Promise<void> {

@@ -15,84 +15,60 @@ export class UserController {
     return await UserRepository.findAll()
   }
 
-  static async getUsersById(req: Request): Promise<User | null> {
-    const { id } = req.params;
-
+  static async getUsersById(id: string): Promise<User | null> {
     return await UserRepository.findById(id);
   }
 
-  static async getUsersByUniversity(req: Request): Promise<User[] | null> {
-    const { universityId } = req.params
-
+  static async getUsersByUniversity(universityId: string): Promise<User[] | null> {
     return await UserRepository.findByUniversity(universityId)
   }
 
-  static async getUsersByRole(req: Request): Promise<User[] | null> {
-    const { role } = req.params;
-
+  static async getUsersByRole(role: string): Promise<User[] | null> {
     return await UserRepository.findByRole(role as Role)
   }
 
-  static async getUsersByDepartment(req: Request): Promise<User[] | null> {
-    const { department } = req.params;
-
+  static async getUsersByDepartment(department: string): Promise<User[] | null> {
     return await UserRepository.findByDepartment(department as Department);
   }
 
-  static async createUser(req: Request, res: Response): Promise<User> {
-    const userModel = req.body;
-
+  static async createUser(userModel: User): Promise<User> {
     return await UserRepository.saveObject(userModel);
   }
 
-  static async updateUser(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
-    const userModel = req.body;
+  static async updateUser(id: string, userModel: User): Promise<User> {
+    let user = await UserRepository.findById(id);
 
-    try {
-      const user = await UserRepository.findById(id);
-
-      if (!user) {
-        res.status(404).json({ message: 'User not found' });
-        return;
-      }
-
-      user.name = userModel.name || user.name;
-      user.email = userModel.email || user.email;
-      user.role = userModel.role || user.role;
-      user.department = userModel.department || user.department;
-      user.universityId = userModel.university || user.universityId;
-      user.updatedAt = userModel.updatedAt || user.updatedAt;
-
-      const updatedUser = await UserRepository.saveObject(user);
-      res.status(200).json(updatedUser);
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
+    if (!user) {
+      throw new Error
     }
+
+    const { id: userId, createdAt, ...formatedUserModel } = userModel;
+
+    user = {
+      ...user,
+      ...formatedUserModel,
+    };
+
+    return await UserRepository.saveObject(user);
   }
 
-  static async deleteUser(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
-
+  static async deleteUser(id: string): Promise<void> {
     const user = await UserRepository.findById(id);
 
     if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
+      throw new Error
     }
 
     await UserRepository.removeObject(user);
   }
 
-  static async addUserToClass(req: Request, res: Response): Promise<User | void> {
-    const { userId, classId } = req.params;
+  static async addUserToClass(userId: string, classId: string): Promise<User> {
 
     const user = await UserRepository.findById(userId);
     const classObj = await ClassRepository.findById(classId);
 
     if (!user || !classObj) {
-      res.status(404).json({ message: "User or Class not found :(" })
-      return;
+      throw new Error
     }
 
     await dataSource

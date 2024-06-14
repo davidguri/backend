@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/:id', async (req: Request, res: Response) => {
   try {
-    const user = await UserController.getUsersById(req);
+    const user = await UserController.getUsersById(req.params.id);
     if (user) {
       res.status(200).json(user);
     } else {
@@ -18,7 +18,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 router.get('/university/:university', async (req: Request, res: Response) => {
   try {
-    const users = await UserController.getUsersByUniversity(req);
+    const users = await UserController.getUsersByUniversity(req.params.university);
     if (users) {
       res.status(200).json(users)
     } else {
@@ -31,7 +31,7 @@ router.get('/university/:university', async (req: Request, res: Response) => {
 
 router.get('/role/:role', async (req: Request, res: Response) => {
   try {
-    const users = await UserController.getUsersByRole(req);
+    const users = await UserController.getUsersByRole(req.params.role);
     if (users) {
       res.status(200).json(users);
     } else {
@@ -44,7 +44,7 @@ router.get('/role/:role', async (req: Request, res: Response) => {
 
 router.get('/department/:department', async (req: Request, res: Response) => {
   try {
-    const users = await UserController.getUsersByDepartment(req);
+    const users = await UserController.getUsersByDepartment(req.params.department);
     if (users) {
       res.status(200).json(users);
     } else {
@@ -66,7 +66,7 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const savedUser = await UserController.createUser(req, res);
+    const savedUser = await UserController.createUser(req.body);
     res.status(201).json(savedUser);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -75,7 +75,8 @@ router.post('/', async (req: Request, res: Response) => {
 
 router.put('/update/:id', async (req: Request, res: Response) => {
   try {
-    await UserController.updateUser(req, res);
+    const updatedUser = await UserController.updateUser(req.params.id, req.body);
+    res.status(200).json(updatedUser);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -83,7 +84,7 @@ router.put('/update/:id', async (req: Request, res: Response) => {
 
 router.put('/:userId/classes/:classId', async (req: Request, res: Response) => {
   try {
-    const user = await UserController.addUserToClass(req, res);
+    const user = await UserController.addUserToClass(req.params.userId, req.params.classId);
     res.status(200).json(user);
   } catch (error: any) {
     res.status(500).json({ message: error.message })
@@ -92,7 +93,7 @@ router.put('/:userId/classes/:classId', async (req: Request, res: Response) => {
 
 router.delete('/:id', async (req: Request, res: Response) => {
   try {
-    await UserController.deleteUser(req, res);
+    await UserController.deleteUser(req.params.id);
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error: any) {
     res.status(500).json({ message: error.message });

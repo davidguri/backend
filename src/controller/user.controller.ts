@@ -4,6 +4,8 @@ import { UserEntity } from '../database/entities/user.entity';
 import User, { Role } from '../models/user.model';
 import Department from '../models/department.model';
 import { dataSource } from '../typeorm.config';
+import { AuthController } from './auth.controller';
+import { Request, Response } from 'express';
 
 
 export class UserController {
@@ -27,8 +29,9 @@ export class UserController {
     return await UserRepository.findByDepartment(department as Department);
   }
 
-  static async createUser(userModel: User): Promise<User> {
-    return await UserRepository.saveObject(userModel);
+  static async createUser(userModel: User): Promise<string> {
+    console.log()
+    return await AuthController.registerUser(userModel);
   }
 
   static async updateUser(id: string, userModel: User): Promise<User> {

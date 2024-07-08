@@ -37,6 +37,9 @@ export class UserEntity {
   @Column()
   role!: Role
 
+  @Column()
+  password!: string
+
   @Column({
     type: "enum", enum: Department, default: Department.Science
   })

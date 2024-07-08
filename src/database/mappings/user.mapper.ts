@@ -14,6 +14,7 @@ export class UserMapper {
     user.updatedAt = model.updatedAt;
     user.universityId = model.universityId;
     user.classes = model.classes || [];
+    user.password = model.password
 
     return user;
   }
@@ -29,6 +30,7 @@ export class UserMapper {
       updatedAt: entity.updatedAt,
       universityId: entity.universityId,
       classes: entity.classes || [],
+      password: entity.password,
     }
   }
 }

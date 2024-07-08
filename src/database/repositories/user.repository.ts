@@ -4,6 +4,7 @@ import { Role } from "../../models/user.model";
 import Department from "../../models/department.model";
 import User from "../../models/user.model";
 import { UserMapper } from "../mappings/user.mapper";
+import { AuthController } from "../../controller/auth.controller";
 
 export const UserRepository = dataSource.getRepository(UserEntity).extend({
   async findAll(): Promise<User[] | null> {

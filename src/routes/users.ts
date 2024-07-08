@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { UserController } from '../controller/user.controller';
+import { authenticate } from '../middleware/auth.middleware';
 
 const router = express.Router();
 
@@ -55,7 +56,7 @@ router.get('/department/:department', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', authenticate, async (req: Request, res: Response) => {
   try {
     const users = await UserController.getUsers();
     res.status(200).json(users);
@@ -66,6 +67,7 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
   try {
+
     const savedUser = await UserController.createUser(req.body);
     res.status(201).json(savedUser);
   } catch (error: any) {

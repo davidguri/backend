@@ -14,6 +14,7 @@ type User = {
   classes: string[] | null;
   role: Role;
   department: Department;
+  password: string;
   createdAt: Date;
   updatedAt: Date;
 };

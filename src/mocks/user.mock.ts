@@ -11,7 +11,8 @@ export const userMock: User[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     universityId: "",
-    classes: null
+    classes: null,
+    password: "hello"
   },
 
   {
@@ -23,6 +24,7 @@ export const userMock: User[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     universityId: "",
-    classes: null
+    classes: null,
+    password: "hello"
   },
 ]
